@@ -153,9 +153,9 @@
                                 </div>
                                 
                                 <!-- Location fields -->
-                                <div id="ciudadContainer">
+                                <div id="ciudadContainer" class="hidden">
                                     <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
-                                    <input type="text" id="ciudad" name="ciudad" class="input-styled" required>
+                                    <input type="text" id="ciudad" name="ciudad" class="input-styled">
                                 </div>
                                 <div id="departamentoContainer" class="hidden">
                                     <label for="departamento" class="block mb-2 font-medium">Departamento</label>
@@ -461,12 +461,11 @@
             const municipioContainer = document.getElementById('municipioContainer');
             const municipioSelect = document.getElementById('municipio');
 
-            let colombiaData = [];
+            let colombiaData = {};
 
             // Fetch and load location data
             async function loadLocationData() {
                 try {
-                    // In a real app, this would be a single API call
                     const countriesResponse = await fetch('https://restcountries.com/v3.1/all?fields=name');
                     let countries = await countriesResponse.json();
                     countries = countries.map(c => c.name.common).sort();
@@ -476,7 +475,6 @@
                          countries.splice(colombiaIndex, 1);
                          countries.unshift("Colombia");
                     }
-
                     countries.push("Otro");
                     
                     paisSelect.innerHTML = '<option value="" disabled selected>Selecciona un país</option>';
@@ -484,16 +482,13 @@
                         paisSelect.innerHTML += `<option value="${country}">${country}</option>`;
                     });
 
-                    const colombiaResponse = await fetch('https://www.datos.gov.co/api/v1/data/955T-3R33?format=json');
+                    // Using a more stable JSON source for Colombian departments and municipalities
+                    const colombiaResponse = await fetch('https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.json');
                     const rawColombiaData = await colombiaResponse.json();
                     
+                    // Adapt the data structure to { "Departamento": ["Municipio1", "Municipio2"] }
                     colombiaData = rawColombiaData.reduce((acc, item) => {
-                        const dep = item.departamento;
-                        const mun = item.municipio;
-                        if (!acc[dep]) {
-                            acc[dep] = [];
-                        }
-                        acc[dep].push(mun);
+                        acc[item.departamento] = item.ciudades;
                         return acc;
                     }, {});
 
@@ -535,6 +530,10 @@
                 if (selectedCountry === 'Colombia') {
                     departamentoContainer.classList.remove('hidden');
                     departamentoSelect.required = true;
+                    // Hide the generic city input for Colombia
+                    ciudadContainer.classList.add('hidden');
+                    ciudadInput.required = false;
+
                 } else if (selectedCountry === 'Otro') {
                     paisOtroContainer.classList.remove('hidden');
                     paisOtroInput.required = true;
@@ -587,26 +586,24 @@
                 for(let [key, value] of formData.entries()) {
                     if(key.startsWith('q')) {
                         responses[key] = parseInt(value);
-                    } else if (key !== 'paisOtro') {
-                        // Store all demographic data except the temp 'paisOtro'
+                    } else if (key !== 'paisOtro' && key !== 'departamento' && key !== 'municipio' && key !== 'sectorOtro') {
                         demographics[key] = value;
                     }
                 }
                 
-                // Consolidate location data
-                if (demographics.pais === 'Otro') {
+                // Consolidate location and sector data
+                if (formData.get('pais') === 'Otro') {
                     demographics.pais = formData.get('paisOtro');
                 }
-                if (demographics.pais === 'Colombia') {
-                    demographics.ciudad = demographics.municipio;
+                if (formData.get('pais') === 'Colombia') {
+                    demographics.departamento = formData.get('departamento');
+                    demographics.ciudad = formData.get('municipio');
                 }
-                delete demographics.municipio;
 
-
-                if (demographics.sector === 'otro') demographics.sector = formData.get('sectorOtro');
-                delete demographics.sectorOtro;
+                if (formData.get('sector') === 'otro') {
+                    demographics.sector = formData.get('sectorOtro');
+                }
                 
-
                 const fullReport = {
                     appId,
                     userId: auth.currentUser.uid,
