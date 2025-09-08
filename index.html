@@ -61,6 +61,11 @@
         .question-block {
             padding: 1.5rem 0;
             border-bottom: 1px solid #e5e7eb;
+            transition: background-color 0.3s;
+            border-radius: 8px;
+        }
+        .question-block.error {
+            background-color: #fee2e2; /* Red highlight for unanswered questions */
         }
         .question-block:last-child {
             border-bottom: none;
@@ -105,6 +110,10 @@
             background-color: #eef2f7;
             padding: 1rem;
             border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        #captcha-container.shake {
+            animation: shake 0.5s;
         }
         #captcha-text {
             font-size: 2rem;
@@ -124,7 +133,7 @@
             cursor: pointer;
         }
 
-        /* Definición de la animación para el banner de cookies */
+        /* Animations */
         @keyframes fade-in-up {
             from {
                 opacity: 0;
@@ -137,6 +146,12 @@
         }
         .animate-fade-in-up {
             animation: fade-in-up 0.5s ease-out forwards;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
         }
     </style>
 </head>
@@ -182,7 +197,7 @@
     <section class="py-16 bg-gray-50 -mt-16 pt-0">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
-                <form id="dsmeForm">
+                <form id="dsmeForm" novalidate> <!-- novalidate prevents default browser popups -->
                     <!-- PASO 1: Demographics -->
                     <div id="demographicsContainer">
                         <div class="card">
@@ -331,6 +346,7 @@
                             
                             <!-- Privacy Policy and Captcha -->
                             <div class="mt-12 space-y-8">
+                                <div id="final-validation-error" class="text-red-600 text-center font-semibold hidden">Por favor, responde todas las preguntas antes de continuar.</div>
                                 <!-- Privacy Policy Checkbox -->
                                 <div class="flex items-center justify-center">
                                     <input type="checkbox" id="privacy-policy" name="privacy-policy" class="h-4 w-4 text-[#003366] border-gray-300 rounded focus:ring-[#003366]">
@@ -468,304 +484,5 @@
                 { pilar: 2, text: "Concibo mi empresa como un proyecto importante en mi vida, pero no como mi vida entera." },
                 { pilar: 2, text: "Las métricas de mi negocio (ingresos, crecimiento, etc.) impactan directamente en mi estado de ánimo y autoestima diarios.", reverse: true },
                 // Pilar 3
-                { pilar: 3, text: "Priorizo mis horas de sueño, entendiendo que son cruciales para mi rendimiento." },
-                { pilar: 3, text: "A menudo sacrifico mi alimentación o el ejercicio por atender urgencias del trabajo.", reverse: true },
-                { pilar: 3, text: "Establezco y respeto límites claros para desconectar mentalmente del trabajo al final del día." },
-                { pilar: 3, text: "Siento un agotamiento constante que no se alivia ni siquiera después de un fin de semana.", reverse: true },
-                { pilar: 3, text: "Dedico tiempo de forma regular a actividades que me \"recargan las baterías\" y no tienen que ver con el trabajo." },
-                { pilar: 3, text: "Soy capaz de delegar tareas eficazmente para proteger mi energía y enfocarme en lo estratégico." },
-                { pilar: 3, text: "La idea de tomar unas vacaciones reales, completamente desconectado/a, me genera más estrés que alivio.", reverse: true },
-                // Pilar 4
-                { pilar: 4, text: "Tengo un círculo de confianza (amigos, familia, pareja) con el que puedo hablar abiertamente de mis miedos." },
-                { pilar: 4, text: "Siento que la mayor parte del tiempo estoy solo/a en la toma de las decisiones más difíciles.", reverse: true },
-                { pilar: 4, text: "Busco activamente el consejo de mentores u otros emprendedores que han pasado por desafíos similares." },
-                { pilar: 4, text: "Evito compartir mis problemas para mantener una imagen de fortaleza y control frente a los demás.", reverse: true },
-                { pilar: 4, text: "Invierto tiempo de calidad en mis relaciones personales, incluso en las épocas de más trabajo." },
-                { pilar: 4, text: "Siento que mi equipo y socios me apoyan no solo como profesional, sino también como persona." },
-                { pilar: 4, text: "Me he distanciado de personas importantes en mi vida a causa de la dedicación a mi empresa.", reverse: true },
-                // Pilar 5
-                { pilar: 5, text: "Tomo decisiones financieras desde la estrategia y el análisis, no desde el pánico o la euforia." },
-                { pilar: 5, text: "La situación del flujo de caja de la empresa me quita el sueño de forma recurrente.", reverse: true },
-                { pilar: 5, text: "Confío en mi habilidad para generar recursos, incluso si enfrento una crisis económica." },
-                { pilar: 5, text: "Mi relación con el dinero es de herramienta y oportunidad, no de miedo y escasez." },
-                { pilar: 5, text: "Siento una fuerte ansiedad al revisar las finanzas de la empresa, independientemente de los resultados.", reverse: true },
-                { pilar: 5, text: "Soy capaz de asumir riesgos financieros calculados sin que esto afecte gravemente mi paz mental." },
-                { pilar: 5, text: "Comparo constantemente mi situación financiera con la de otros emprendedores, lo que me genera frustración.", reverse: true }
-            ];
-            
-            // --- Render Questions with button-style options ---
-            let currentPilar = 0;
-            questions.forEach((q, index) => {
-                if (q.pilar !== currentPilar) {
-                    currentPilar = q.pilar;
-                    const pilarTitle = document.createElement('h4');
-                    pilarTitle.className = "text-xl font-semibold mt-8 mb-4 text-[#003366] border-t pt-8 first:mt-0 first:border-t-0 first:pt-0";
-                    pilarTitle.textContent = `Pilar ${currentPilar}: ${getPilarName(currentPilar)}`;
-                    questionsDisplay.appendChild(pilarTitle);
-                }
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question-block';
-                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p>`;
-
-                const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'options-grid';
-                
-                ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'].forEach((label, i) => {
-                    const value = i + 1;
-                    const radioId = `q${index + 1}_${value}`;
-                    
-                    const input = document.createElement('input');
-                    input.type = 'radio';
-                    input.id = radioId;
-                    input.name = `q${index + 1}`;
-                    input.value = value;
-                    input.required = true;
-
-                    const labelEl = document.createElement('label');
-                    labelEl.htmlFor = radioId;
-                    labelEl.textContent = label;
-
-                    optionsContainer.appendChild(input);
-                    optionsContainer.appendChild(labelEl);
-                });
-                questionDiv.appendChild(optionsContainer);
-                questionsDisplay.appendChild(questionDiv);
-            });
-
-            function getPilarName(pilarNumber) {
-                const names = ["", "Resiliencia y Gestión de la Incertidumbre", "Vínculo Identitario (Fundador ↔ Empresa)", "Sostenibilidad y Energía Personal", "Capital Social y Red de Apoyo", "Psicología Financiera"];
-                return names[pilarNumber];
-            }
-
-            // --- Step 1 to Step 2 Logic ---
-            continueButton.addEventListener('click', () => {
-                const inputs = demographicsContainer.querySelectorAll('input[required], select[required]');
-                let allValid = true;
-                inputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        allValid = false;
-                        input.classList.add('border-red-500');
-                    } else {
-                        input.classList.remove('border-red-500');
-                    }
-                });
-
-                if (allValid) {
-                    demographicsContainer.classList.add('hidden');
-                    questionsContainer.classList.remove('hidden');
-                    window.scrollTo({ top: questionsContainer.offsetTop - 100, behavior: 'smooth' });
-                } else {
-                    form.reportValidity();
-                }
-            });
-            
-            // --- Location Logic ---
-            const paisSelect = document.getElementById('pais');
-            const paisOtroContainer = document.getElementById('paisOtroContainer');
-            const paisOtroInput = document.getElementById('paisOtro');
-            const ciudadContainer = document.getElementById('ciudadContainer');
-            const ciudadInput = document.getElementById('ciudad');
-            const departamentoContainer = document.getElementById('departamentoContainer');
-            const departamentoSelect = document.getElementById('departamento');
-            const municipioContainer = document.getElementById('municipioContainer');
-            const municipioSelect = document.getElementById('municipio');
-
-            let colombiaData = {};
-
-            async function loadLocationData() {
-                try {
-                    const countriesResponse = await fetch('https://restcountries.com/v3.1/all?fields=name');
-                    let countries = await countriesResponse.json();
-                    countries = countries.map(c => c.name.common).sort();
-                    
-                    const colombiaIndex = countries.indexOf("Colombia");
-                    if (colombiaIndex > -1) {
-                         countries.splice(colombiaIndex, 1);
-                         countries.unshift("Colombia");
-                    }
-                    countries.push("Otro");
-                    
-                    paisSelect.innerHTML = '<option value="" disabled selected>Selecciona un país</option>';
-                    countries.forEach(country => {
-                        paisSelect.innerHTML += `<option value="${country}">${country}</option>`;
-                    });
-
-                    const colombiaResponse = await fetch('https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.json');
-                    const rawColombiaData = await colombiaResponse.json();
-                    
-                    colombiaData = rawColombiaData.reduce((acc, item) => {
-                        acc[item.departamento] = item.ciudades;
-                        return acc;
-                    }, {});
-
-                    const departamentos = Object.keys(colombiaData).sort();
-                    departamentoSelect.innerHTML = '<option value="" disabled selected>Selecciona un departamento</option>';
-                    departamentos.forEach(dep => {
-                        departamentoSelect.innerHTML += `<option value="${dep}">${dep}</option>`;
-                    });
-
-                } catch (error) {
-                    console.error("Could not load location data:", error);
-                    const fallbackCountries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Perú", "Chile", "Ecuador", "España", "Otro"];
-                    paisSelect.innerHTML = '<option value="" disabled selected>Selecciona un país</option>';
-                    fallbackCountries.forEach(country => paisSelect.innerHTML += `<option value="${country}">${country}</option>`);
-                }
-            }
-            
-            loadLocationData();
-
-            paisSelect.addEventListener('change', (e) => {
-                const selectedCountry = e.target.value;
-                paisOtroContainer.classList.add('hidden');
-                paisOtroInput.required = false;
-                ciudadContainer.classList.add('hidden');
-                ciudadInput.required = false;
-                departamentoContainer.classList.add('hidden');
-                departamentoSelect.required = false;
-                municipioContainer.classList.add('hidden');
-                municipioSelect.required = false;
-                municipioSelect.innerHTML = '';
-
-                if (selectedCountry === 'Colombia') {
-                    departamentoContainer.classList.remove('hidden');
-                    departamentoSelect.required = true;
-                } else if (selectedCountry === 'Otro') {
-                    paisOtroContainer.classList.remove('hidden');
-                    paisOtroInput.required = true;
-                    ciudadContainer.classList.remove('hidden');
-                    ciudadInput.required = true;
-                } else {
-                    ciudadContainer.classList.remove('hidden');
-                    ciudadInput.required = true;
-                }
-            });
-
-            departamentoSelect.addEventListener('change', (e) => {
-                const selectedDep = e.target.value;
-                const municipios = colombiaData[selectedDep].sort();
-                
-                municipioSelect.innerHTML = '<option value="" disabled selected>Selecciona un municipio</option>';
-                municipios.forEach(mun => {
-                    municipioSelect.innerHTML += `<option value="${mun}">${mun}</option>`;
-                });
-                
-                municipioContainer.classList.remove('hidden');
-                municipioSelect.required = true;
-            });
-            
-            // --- Other Logic (Sector) ---
-            const sectorSelect = document.getElementById('sector');
-            const sectorOtroContainer = document.getElementById('sectorOtroContainer');
-            sectorSelect.addEventListener('change', () => {
-                sectorOtroContainer.classList.toggle('hidden', sectorSelect.value !== 'otro');
-                document.getElementById('sectorOtro').required = sectorSelect.value === 'otro';
-            });
-
-            // --- Captcha and Privacy Policy Logic ---
-            const privacyPolicyCheckbox = document.getElementById('privacy-policy');
-            const captchaText = document.getElementById('captcha-text');
-            const captchaInput = document.getElementById('captcha-input');
-            const refreshCaptchaButton = document.getElementById('refresh-captcha');
-            const captchaError = document.getElementById('captcha-error');
-            let captchaAnswer = 0;
-
-            function generateCaptcha() {
-                const num1 = Math.floor(Math.random() * 10) + 1;
-                const num2 = Math.floor(Math.random() * 10);
-                captchaAnswer = num1 + num2;
-                
-                const distortChar = (char) => {
-                    const rotation = Math.random() * 30 - 15; // -15 to +15 deg
-                    const skewY = Math.random() * 20 - 10;    // -10 to +10 deg skew
-                    const translateY = Math.random() * 8 - 4; // -4px to +4px vertical shift
-                    return `<span style="transform: rotate(${rotation}deg) skewY(${skewY}deg) translateY(${translateY}px);">${char}</span>`;
-                };
-
-                const distortedNum1 = String(num1).split('').map(distortChar).join('');
-                const distortedNum2 = String(num2).split('').map(distortChar).join('');
-                
-                captchaText.innerHTML = `${distortedNum1} <span class="mx-2">+</span> ${distortedNum2}`;
-                captchaInput.value = '';
-                captchaError.classList.add('hidden');
-            }
-            
-            refreshCaptchaButton.addEventListener('click', generateCaptcha);
-            
-            function checkSubmitButtonState() {
-                submitButton.disabled = !privacyPolicyCheckbox.checked;
-            }
-
-            privacyPolicyCheckbox.addEventListener('change', checkSubmitButtonState);
-
-            // --- Form Submission ---
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                // 1. Validate Captcha
-                if (parseInt(captchaInput.value, 10) !== captchaAnswer) {
-                    captchaError.classList.remove('hidden');
-                    generateCaptcha(); // Generate a new one to prevent spamming the same answer
-                    return;
-                }
-                captchaError.classList.add('hidden');
-
-                // 2. Check Authentication
-                if (!auth.currentUser) {
-                    alert("Aún estamos autenticando tu sesión. Por favor, espera unos segundos e intenta de nuevo.");
-                    return;
-                }
-                
-                submitButton.disabled = true;
-                submitButton.textContent = 'Enviando...';
-
-                const formData = new FormData(form);
-                const demographics = {};
-                const responses = {};
-
-                for(let [key, value] of formData.entries()) {
-                    if(key.startsWith('q')) {
-                        responses[key] = parseInt(value);
-                    } else if (!['paisOtro', 'departamento', 'municipio', 'sectorOtro', 'privacy-policy', 'captcha-input'].includes(key)) {
-                        demographics[key] = value;
-                    }
-                }
-                
-                // Consolidate location and sector data
-                if (formData.get('pais') === 'Otro') demographics.pais = formData.get('paisOtro');
-                if (formData.get('pais') === 'Colombia') {
-                    demographics.departamento = formData.get('departamento');
-                    demographics.ciudad = formData.get('municipio');
-                }
-                if (formData.get('sector') === 'otro') demographics.sector = formData.get('sectorOtro');
-                
-                const fullReport = {
-                    appId,
-                    userId: auth.currentUser.uid,
-                    createdAt: serverTimestamp(),
-                    demographics,
-                    responses,
-                    questions
-                };
-                
-                try {
-                    const docRef = await addDoc(collection(db, "artifacts", appId, "public", "data", "dsme-reports"), fullReport);
-                    sessionStorage.setItem('dsmeResultId', docRef.id);
-                    sessionStorage.setItem('dsmeLastReport', JSON.stringify(fullReport));
-                    window.location.href = `rdsme.html`;
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    alert('Hubo un error al guardar tus resultados.');
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Finalizar y Enviar';
-                    checkSubmitButtonState(); // Re-check button state after error
-                }
-            });
-
-            // Initial calls
-            generateCaptcha();
-            checkSubmitButtonState();
-        });
-    </script>
-</body>
-</html>
+                { pilar: 3, text: "Priorizo mis horas de sueño, entendiendo que son cruci"
 
