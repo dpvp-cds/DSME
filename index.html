@@ -157,16 +157,19 @@
 </head>
 <body class="antialiased">
 
+    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="https://www.caminosdelser.co" target="_blank">
                 <img src="logoprincipal.png" alt="Caminos del Ser Logo" class="h-11 w-auto">
             </a>
+            <!-- Desktop Menu -->
             <nav class="hidden md:flex items-center space-x-6">
                 <a href="https://www.caminosdelser.co" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Inicio</a>
                 <a href="BaseTeorica_PI.pdf" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Base Teórica</a>
                 <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Contacto</a>
             </nav>
+            <!-- Mobile Menu Button -->
             <div class="md:hidden">
                 <button id="hamburger-button" class="text-gray-600 hover:text-[#003366] focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -175,6 +178,7 @@
                 </button>
             </div>
         </div>
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <a href="https://www.caminosdelser.co" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Inicio</a>
             <a href="BaseTeorica_PI.pdf" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Base Teórica</a>
@@ -182,21 +186,26 @@
         </div>
     </header>
 
+    <!-- Hero Section -->
     <main id="instrumento" class="container mx-auto px-6 py-16 text-center">
         <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Diagnóstico de Salud Mental para el Emprendedor</h1>
         <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">Una herramienta diseñada para iluminar tu bienestar, fortalecer tu resiliencia y asegurar tu sostenibilidad en el desafiante camino de emprender.</p>
         <p class="text-2xl italic text-gray-800 mb-10">"Que el cielo sea el límite, no tu mente"</p>
     </main>
 
+    <!-- Instrumento Section -->
     <section class="py-16 bg-gray-50 -mt-16 pt-0">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
-                <form id="dsmeForm" novalidate> <div id="demographicsContainer">
+                <form id="dsmeForm" novalidate> <!-- novalidate prevents default browser popups -->
+                    <!-- PASO 1: Demographics -->
+                    <div id="demographicsContainer">
                         <div class="card">
                             <h2 class="text-3xl font-bold mb-4">Paso 1: Información General</h2>
                             <p class="mb-6">Comencemos con algunos datos básicos. Esta información es confidencial y nos ayudará a contextualizar tus resultados.</p>
                         
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Datos Personales -->
                                 <div><label for="nombreCompleto" class="block mb-2 font-medium">Nombre Completo</label><input type="text" id="nombreCompleto" name="nombreCompleto" class="input-styled" required></div>
                                 <div><label for="email" class="block mb-2 font-medium">Correo Electrónico</label><input type="email" id="email" name="email" class="input-styled" required></div>
                                 <div><label for="edad" class="block mb-2 font-medium">Edad</label><input type="number" id="edad" name="edad" class="input-styled" required min="15"></div>
@@ -215,6 +224,7 @@
                                     <select id="pais" name="pais" class="select-styled" required></select>
                                 </div>
                                 
+                                <!-- Location fields -->
                                 <div id="ciudadContainer" class="hidden">
                                     <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
                                     <input type="text" id="ciudad" name="ciudad" class="input-styled">
@@ -321,6 +331,7 @@
                         </div>
                     </div>
 
+                    <!-- PASO 2: Cuestionario -->
                     <div id="questionsContainer" class="hidden">
                         <div class="card">
                             <h2 class="text-3xl font-bold mb-2">Paso 2: Cuestionario de Pilares</h2>
@@ -328,8 +339,10 @@
                             
                             <div id="questions-list"></div>
                             
+                            <!-- Privacy Policy and Captcha -->
                             <div class="mt-12 space-y-8">
                                 <div id="final-validation-error" class="text-red-600 text-center font-semibold hidden">Por favor, responde todas las preguntas antes de continuar.</div>
+                                <!-- Privacy Policy Checkbox -->
                                 <div class="flex items-center justify-center">
                                     <input type="checkbox" id="privacy-policy" name="privacy-policy" class="h-4 w-4 text-[#003366] border-gray-300 rounded focus:ring-[#003366]">
                                     <label for="privacy-policy" class="ml-2 block text-sm text-gray-900">
@@ -337,6 +350,7 @@
                                     </label>
                                 </div>
 
+                                <!-- Captcha -->
                                 <div id="captcha-container">
                                     <div id="captcha-text"></div>
                                     <input type="number" id="captcha-input" class="input-styled w-24 text-center text-lg" placeholder="=">
@@ -359,12 +373,14 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="bg-[#1a1a1a] text-white py-8">
         <div class="container mx-auto text-center">
             <p class="text-gray-400">&copy; 2025 Jorge Arango Castaño - Caminos del Ser. Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <!-- Cookie Banner -->
     <div id="cookie-banner" class="hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50">
         <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-sm text-center md:text-left">
@@ -378,21 +394,14 @@
     </div>
     
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // --- FIREBASE CONFIGURATION (Placeholder) ---
-        const firebaseConfig = {
-            // Replace with your actual Firebase config
-            apiKey: "AIzaSy...",
-            authDomain: "your-project-id.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project-id.appspot.com",
-            messagingSenderId: "...",
-            appId: "..."
-        };
+        // --- GLOBAL VARIABLES (Provided by the environment) ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dsme-dev';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {}; // Use environment config
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // --- FIREBASE INITIALIZATION ---
         let app, auth, db;
@@ -401,11 +410,17 @@
             auth = getAuth(app);
             db = getFirestore(app);
             
-            onAuthStateChanged(auth, (user) => {
+            onAuthStateChanged(auth, async (user) => {
                 if (!user) {
-                    signInAnonymously(auth).catch((error) => {
-                        console.error("Anonymous sign-in failed:", error);
-                    });
+                     try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Authentication failed:", error);
+                    }
                 }
             });
         } catch(e) { console.error("Error initializing Firebase:", e); }
@@ -448,7 +463,6 @@
             const municipioSelect = document.getElementById('municipio');
             let colombiaData = [];
 
-            // Static country list
             const paises = [
                 { name: 'Selecciona un país', value: '' },
                 { name: 'Colombia', value: 'Colombia' },
@@ -487,7 +501,6 @@
                     const response = await fetch('https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.json');
                     if (!response.ok) throw new Error('Network response was not ok');
                     colombiaData = await response.json();
-                    colombiaData.sort((a, b) => a.departamento.localeCompare(b.departamento));
                 } catch (error) {
                     console.error('Error fetching Colombia data:', error);
                 }
@@ -753,7 +766,7 @@
                     email: data.email,
                     edad: data.edad,
                     genero: data.genero,
-                    pais: data.pais === 'Colombia' ? 'Colombia' : data.pais,
+                    pais: data.pais,
                     ciudad: data.pais === 'Colombia' ? `${data.municipio}, ${data.departamento}` : data.ciudad,
                     nivelEducativo: data.nivelEducativo,
                     estadoCivil: data.estadoCivil,
@@ -778,7 +791,8 @@
                 
                 // 4. Save to Firestore
                 try {
-                    await addDoc(collection(db, "dsme-reports"), finalData);
+                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'dsme-reports');
+                    await addDoc(collectionRef, finalData);
                     
                     // 5. Save to Session Storage and Redirect
                     sessionStorage.setItem('dsmeResults', JSON.stringify(finalData));
