@@ -25,16 +25,21 @@ async function crearPDF_DSME(datos) {
     page.drawText(`Empresa: ${datos.empresa.nombre}`, { x: 50, y, font, size: 12 });
     y -= 30;
 
-    // Resultados de Pilares
+    // Resultados de Pilares - Asegurarse que los datos llegan
     page.drawText('Resultados de los Pilares:', { x: 50, y, font: boldFont, size: 16 });
     y -= 25;
 
-    const pilarScores = datos.pilarScores;
+    // Los puntajes se calculan en el frontend y se pasan en el body
+    const pilarScores = datos.pilarScores; 
+    const ismeScore = datos.ismeScore;
+
     const pilarNames = ["", "1. Resiliencia", "2. Vínculo Identitario", "3. Sostenibilidad", "4. Capital Social", "5. Psicología Financiera"];
     
-    for (const pilar in pilarScores) {
-        page.drawText(`${pilarNames[pilar]}: ${pilarScores[pilar]} / 35`, { x: 70, y, font, size: 12 });
-        y -= 20;
+    if (pilarScores) {
+        for (const pilar in pilarScores) {
+            page.drawText(`${pilarNames[pilar]}: ${pilarScores[pilar]} / 35`, { x: 70, y, font, size: 12 });
+            y -= 20;
+        }
     }
 
     y -= 10;
@@ -42,7 +47,9 @@ async function crearPDF_DSME(datos) {
     // Resultado Global
     page.drawText('Resultado Global (ISME):', { x: 50, y, font: boldFont, size: 16 });
     y -= 25;
-    page.drawText(`${datos.ismeScore.toFixed(2)} / 100`, { x: 70, y, font: boldFont, size: 14, color: rgb(0, 0.2, 0.4) });
+    if (ismeScore !== undefined) {
+        page.drawText(`${ismeScore.toFixed(2)} / 100`, { x: 70, y, font: boldFont, size: 14, color: rgb(0, 0.2, 0.4) });
+    }
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
@@ -69,13 +76,18 @@ export default async function handler(request, response) {
         console.log("PDF de DSME creado.");
 
         // 3. Enviar correo con Resend
-        // Asegúrate de tener la variable RESEND_API_KEY en Vercel
-        const resend = new Resend(process.env.RESEND_API_KEY);
+        // CORRECCIÓN: Usar RESEND2_API_KEY para coincidir con la configuración del proyecto anterior.
+        const resendApiKey = process.env.RESEND2_API_KEY;
+        if (!resendApiKey) {
+            console.error("La variable de entorno RESEND2_API_KEY no está definida en Vercel.");
+            throw new Error("La configuración para enviar correos no está completa.");
+        }
+        const resend = new Resend(resendApiKey);
         
-        console.log(`Enviando correo a dpvp.cds@emcotic.com...`);
+        console.log(`Enviando correo a dpvp.cds@emotic.com...`);
         const { data, error } = await resend.emails.send({
-          from: 'Reporte DSME <noreply@caminosdelser.co>', // Puedes ajustar el remitente
-          to: 'dpvp.cds@emcotic.com',
+          from: 'Reporte DSME <noreply@caminosdelser.co>',
+          to: 'dpvp.cds@emotic.com',
           subject: `Nuevo Reporte DSME - ${datosCompletos.demograficos.nombre}`,
           html: `<h1>Nuevo Reporte de la Escala DSME</h1><p>Se ha completado un nuevo diagnóstico.</p><p><strong>Nombre:</strong> ${datosCompletos.demograficos.nombre}</p><p><strong>Email:</strong> ${datosCompletos.demograficos.email}</p><p>El reporte completo se encuentra adjunto en formato PDF.</p>`,
           attachments: [
