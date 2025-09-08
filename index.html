@@ -399,7 +399,8 @@
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // --- GLOBAL VARIABLES (Provided by the environment) ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dsme-dev';
+        // MODIFICACIÓN: Usamos 'dsm' como el identificador fijo para evitar inconsistencias.
+        const appId = 'dsm'; 
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {}; // Use environment config
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
@@ -791,6 +792,7 @@
                 
                 // 4. Save to Firestore
                 try {
+                    // Se asegura de que la ruta de guardado siempre use el appId 'dsm'
                     const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'dsme-reports');
                     await addDoc(collectionRef, finalData);
                     
