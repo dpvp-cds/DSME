@@ -34,9 +34,10 @@
             box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
         }
         .btn-brand:disabled {
-            background-color: #668cb3;
+            background-color: #99aabb;
             cursor: not-allowed;
             transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .card {
             background-color: white;
@@ -64,20 +65,62 @@
         .question-block:last-child {
             border-bottom: none;
         }
-        .radio-label {
+        
+        /* New styles for button-like radio options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        .options-grid input[type="radio"] {
+            display: none; /* Oculta el radio button real */
+        }
+        .options-grid label {
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-size: 0.8rem;
+        }
+        .options-grid label:hover {
+            background-color: #f4f6f8;
+            border-color: #003366;
+        }
+        .options-grid input[type="radio"]:checked + label {
+            background-color: #003366;
+            color: white;
+            border-color: #003366;
+            font-weight: 600;
+        }
+        
+        /* Captcha Styles */
+        #captcha-container {
             display: flex;
             align-items: center;
-            cursor: pointer;
-            padding: 0.5rem 0;
+            justify-content: center;
+            gap: 1rem;
+            background-color: #eef2f7;
+            padding: 1rem;
             border-radius: 8px;
-            transition: background-color 0.2s;
         }
-        .radio-label:hover {
-             background-color: #f0f3f6;
+        #captcha-text {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            user-select: none;
         }
-        .radio-label input {
-            margin-right: 0.75rem;
+        #captcha-text span {
+            display: inline-block;
         }
+        #refresh-captcha {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
         /* Definición de la animación para el banner de cookies */
         @keyframes fade-in-up {
             from {
@@ -267,9 +310,33 @@
                             <p class="mb-6 text-sm text-gray-500">Indica tu grado de acuerdo con cada afirmación.</p>
                             
                             <div id="questions-container"></div>
+                            
+                            <!-- Privacy Policy and Captcha -->
+                            <div class="mt-12 space-y-8">
+                                <!-- Privacy Policy Checkbox -->
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" id="privacy-policy" name="privacy-policy" class="h-4 w-4 text-[#003366] border-gray-300 rounded focus:ring-[#003366]">
+                                    <label for="privacy-policy" class="ml-2 block text-sm text-gray-900">
+                                        He leído y acepto la <a href="https://www.caminosdelser.co/politicadatos.html" target="_blank" class="font-medium text-[#003366] hover:underline">política de privacidad y tratamiento de datos.</a>
+                                    </label>
+                                </div>
+
+                                <!-- Captcha -->
+                                <div id="captcha-container">
+                                    <div id="captcha-text"></div>
+                                    <input type="number" id="captcha-input" class="input-styled w-24 text-center text-lg" placeholder="=">
+                                    <button type="button" id="refresh-captcha">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-[#003366]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M20 4h-5v5M4 20h5v-5M15 5C13.17 3.17 10.67 2 8 2 3.58 2 0 5.58 0 10s3.58 8 8 8c4.08 0 7.44-3.05 7.93-7" transform="rotate(315 12 12)"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div id="captcha-error" class="text-red-600 text-center text-sm hidden">Respuesta incorrecta. Por favor, intenta de nuevo.</div>
+                            </div>
+
 
                             <div class="mt-12 text-center">
-                                <button type="submit" id="submitButton" class="btn-brand text-lg">Finalizar y Enviar</button>
+                                <button type="submit" id="submitButton" class="btn-brand text-lg" disabled>Finalizar y Enviar</button>
                             </div>
                         </div>
                     </div>
@@ -338,6 +405,7 @@
             const questionsContainer = document.getElementById('questionsContainer');
             const continueButton = document.getElementById('continueButton');
             const questionsDisplay = document.getElementById('questions-container');
+            const submitButton = document.getElementById('submitButton');
 
             // --- Cookie Banner Logic ---
             const cookieBanner = document.getElementById('cookie-banner');
@@ -398,7 +466,7 @@
                 { pilar: 5, text: "Comparo constantemente mi situación financiera con la de otros emprendedores, lo que me genera frustración.", reverse: true }
             ];
             
-            // --- Render Questions ---
+            // --- Render Questions with button-style options ---
             let currentPilar = 0;
             questions.forEach((q, index) => {
                 if (q.pilar !== currentPilar) {
@@ -410,13 +478,29 @@
                 }
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'question-block';
+                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p>`;
+
                 const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'flex flex-col md:flex-row justify-around text-sm';
+                optionsContainer.className = 'options-grid';
+                
                 ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'].forEach((label, i) => {
                     const value = i + 1;
-                    optionsContainer.innerHTML += `<label class="radio-label"><input type="radio" name="q${index + 1}" value="${value}" required> ${label}</label>`;
+                    const radioId = `q${index + 1}_${value}`;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.id = radioId;
+                    input.name = `q${index + 1}`;
+                    input.value = value;
+                    input.required = true;
+
+                    const labelEl = document.createElement('label');
+                    labelEl.htmlFor = radioId;
+                    labelEl.textContent = label;
+
+                    optionsContainer.appendChild(input);
+                    optionsContainer.appendChild(labelEl);
                 });
-                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p>`;
                 questionDiv.appendChild(optionsContainer);
                 questionsDisplay.appendChild(questionDiv);
             });
@@ -433,7 +517,6 @@
                 inputs.forEach(input => {
                     if (!input.checkValidity()) {
                         allValid = false;
-                        // Highlight invalid fields
                         input.classList.add('border-red-500');
                     } else {
                         input.classList.remove('border-red-500');
@@ -445,27 +528,23 @@
                     questionsContainer.classList.remove('hidden');
                     window.scrollTo({ top: questionsContainer.offsetTop - 100, behavior: 'smooth' });
                 } else {
-                    form.reportValidity(); // This will show native browser validation messages
+                    form.reportValidity();
                 }
             });
             
-            // --- Location Logic (Countries, Departments, Municipalities) ---
+            // --- Location Logic ---
             const paisSelect = document.getElementById('pais');
             const paisOtroContainer = document.getElementById('paisOtroContainer');
             const paisOtroInput = document.getElementById('paisOtro');
-            
             const ciudadContainer = document.getElementById('ciudadContainer');
             const ciudadInput = document.getElementById('ciudad');
-
             const departamentoContainer = document.getElementById('departamentoContainer');
             const departamentoSelect = document.getElementById('departamento');
-
             const municipioContainer = document.getElementById('municipioContainer');
             const municipioSelect = document.getElementById('municipio');
 
             let colombiaData = {};
 
-            // Fetch and load location data
             async function loadLocationData() {
                 try {
                     const countriesResponse = await fetch('https://restcountries.com/v3.1/all?fields=name');
@@ -484,11 +563,9 @@
                         paisSelect.innerHTML += `<option value="${country}">${country}</option>`;
                     });
 
-                    // Using a more stable JSON source for Colombian departments and municipalities
                     const colombiaResponse = await fetch('https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.json');
                     const rawColombiaData = await colombiaResponse.json();
                     
-                    // Adapt the data structure to { "Departamento": ["Municipio1", "Municipio2"] }
                     colombiaData = rawColombiaData.reduce((acc, item) => {
                         acc[item.departamento] = item.ciudades;
                         return acc;
@@ -502,7 +579,6 @@
 
                 } catch (error) {
                     console.error("Could not load location data:", error);
-                    // Fallback to simpler country list if APIs fail
                     const fallbackCountries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Perú", "Chile", "Ecuador", "España", "Otro"];
                     paisSelect.innerHTML = '<option value="" disabled selected>Selecciona un país</option>';
                     fallbackCountries.forEach(country => paisSelect.innerHTML += `<option value="${country}">${country}</option>`);
@@ -513,29 +589,19 @@
 
             paisSelect.addEventListener('change', (e) => {
                 const selectedCountry = e.target.value;
-
-                // Reset all fields
                 paisOtroContainer.classList.add('hidden');
                 paisOtroInput.required = false;
-                
                 ciudadContainer.classList.add('hidden');
                 ciudadInput.required = false;
-
                 departamentoContainer.classList.add('hidden');
                 departamentoSelect.required = false;
-
                 municipioContainer.classList.add('hidden');
                 municipioSelect.required = false;
                 municipioSelect.innerHTML = '';
 
-
                 if (selectedCountry === 'Colombia') {
                     departamentoContainer.classList.remove('hidden');
                     departamentoSelect.required = true;
-                    // Hide the generic city input for Colombia
-                    ciudadContainer.classList.add('hidden');
-                    ciudadInput.required = false;
-
                 } else if (selectedCountry === 'Otro') {
                     paisOtroContainer.classList.remove('hidden');
                     paisOtroInput.required = true;
@@ -559,8 +625,7 @@
                 municipioContainer.classList.remove('hidden');
                 municipioSelect.required = true;
             });
-
-
+            
             // --- Other Logic (Sector) ---
             const sectorSelect = document.getElementById('sector');
             const sectorOtroContainer = document.getElementById('sectorOtroContainer');
@@ -569,15 +634,53 @@
                 document.getElementById('sectorOtro').required = sectorSelect.value === 'otro';
             });
 
+            // --- Captcha and Privacy Policy Logic ---
+            const privacyPolicyCheckbox = document.getElementById('privacy-policy');
+            const captchaText = document.getElementById('captcha-text');
+            const captchaInput = document.getElementById('captcha-input');
+            const refreshCaptchaButton = document.getElementById('refresh-captcha');
+            const captchaError = document.getElementById('captcha-error');
+            let captchaAnswer = 0;
+
+            function generateCaptcha() {
+                const num1 = Math.floor(Math.random() * 10) + 1;
+                const num2 = Math.floor(Math.random() * 10);
+                captchaAnswer = num1 + num2;
+                
+                const distortedNum1 = String(num1).split('').map(char => `<span style="transform: rotate(${Math.random()*20-10}deg);">${char}</span>`).join('');
+                const distortedNum2 = String(num2).split('').map(char => `<span style="transform: rotate(${Math.random()*20-10}deg);">${char}</span>`).join('');
+                
+                captchaText.innerHTML = `${distortedNum1} + ${distortedNum2}`;
+                captchaInput.value = '';
+                captchaError.classList.add('hidden');
+            }
+            
+            refreshCaptchaButton.addEventListener('click', generateCaptcha);
+            
+            function checkSubmitButtonState() {
+                submitButton.disabled = !privacyPolicyCheckbox.checked;
+            }
+
+            privacyPolicyCheckbox.addEventListener('change', checkSubmitButtonState);
+
             // --- Form Submission ---
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                // 1. Validate Captcha
+                if (parseInt(captchaInput.value, 10) !== captchaAnswer) {
+                    captchaError.classList.remove('hidden');
+                    generateCaptcha(); // Generate a new one to prevent spamming the same answer
+                    return;
+                }
+                captchaError.classList.add('hidden');
+
+                // 2. Check Authentication
                 if (!auth.currentUser) {
                     alert("Aún estamos autenticando tu sesión. Por favor, espera unos segundos e intenta de nuevo.");
                     return;
                 }
                 
-                const submitButton = document.getElementById('submitButton');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Enviando...';
 
@@ -588,23 +691,18 @@
                 for(let [key, value] of formData.entries()) {
                     if(key.startsWith('q')) {
                         responses[key] = parseInt(value);
-                    } else if (key !== 'paisOtro' && key !== 'departamento' && key !== 'municipio' && key !== 'sectorOtro') {
+                    } else if (!['paisOtro', 'departamento', 'municipio', 'sectorOtro', 'privacy-policy', 'captcha-input'].includes(key)) {
                         demographics[key] = value;
                     }
                 }
                 
                 // Consolidate location and sector data
-                if (formData.get('pais') === 'Otro') {
-                    demographics.pais = formData.get('paisOtro');
-                }
+                if (formData.get('pais') === 'Otro') demographics.pais = formData.get('paisOtro');
                 if (formData.get('pais') === 'Colombia') {
                     demographics.departamento = formData.get('departamento');
                     demographics.ciudad = formData.get('municipio');
                 }
-
-                if (formData.get('sector') === 'otro') {
-                    demographics.sector = formData.get('sectorOtro');
-                }
+                if (formData.get('sector') === 'otro') demographics.sector = formData.get('sectorOtro');
                 
                 const fullReport = {
                     appId,
@@ -625,11 +723,15 @@
                     alert('Hubo un error al guardar tus resultados.');
                     submitButton.disabled = false;
                     submitButton.textContent = 'Finalizar y Enviar';
+                    checkSubmitButtonState(); // Re-check button state after error
                 }
             });
+
+            // Initial calls
+            generateCaptcha();
+            checkSubmitButtonState();
         });
     </script>
 </body>
 </html>
-
 
