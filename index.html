@@ -398,7 +398,7 @@
     </div>
     
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -409,25 +409,33 @@
 
         // --- FIREBASE INITIALIZATION ---
         let app, auth, db;
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            
-            onAuthStateChanged(auth, async (user) => {
-                if (!user) {
-                     try {
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
+
+        if (Object.keys(firebaseConfig).length === 0) {
+            console.error("ERROR CRÍTICO: La configuración de Firebase ('__firebase_config') no se ha cargado. Revisa las variables de entorno en Vercel.");
+        } else {
+            try {
+                app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                         try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Authentication failed:", error);
                         }
-                    } catch (error) {
-                        console.error("Authentication failed:", error);
                     }
-                }
-            });
-        } catch(e) { console.error("Error initializing Firebase:", e); }
+                });
+            } catch(e) { 
+                console.error("Error al inicializar Firebase:", e); 
+                db = null;
+            }
+        }
         
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('dsmeForm');
@@ -797,6 +805,9 @@
                 
                 // 4. Save to Firestore
                 try {
+                    if (!db) {
+                        throw new Error("La conexión con la base de datos no está disponible. Revisa la consola para más detalles.");
+                    }
                     const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'dsme-reports');
                     await addDoc(collectionRef, finalData);
                     
