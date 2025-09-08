@@ -147,11 +147,26 @@
                                     <label for="pais" class="block mb-2 font-medium">País de Residencia</label>
                                     <select id="pais" name="pais" class="select-styled" required></select>
                                 </div>
-                                <div>
+                                <div id="paisOtroContainer" class="hidden">
+                                    <label for="paisOtro" class="block mb-2 font-medium">Por favor, especifica tu país</label>
+                                    <input type="text" id="paisOtro" name="paisOtro" class="input-styled">
+                                </div>
+                                
+                                <!-- Location fields -->
+                                <div id="ciudadContainer">
                                     <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
                                     <input type="text" id="ciudad" name="ciudad" class="input-styled" required>
-                                    <select id="ciudadSelect" name="ciudadSelect" class="select-styled hidden"></select>
                                 </div>
+                                <div id="departamentoContainer" class="hidden">
+                                    <label for="departamento" class="block mb-2 font-medium">Departamento</label>
+                                    <select id="departamento" name="departamento" class="select-styled"></select>
+                                </div>
+                                <div id="municipioContainer" class="hidden">
+                                    <label for="municipio" class="block mb-2 font-medium">Municipio / Ciudad</label>
+                                    <select id="municipio" name="municipio" class="select-styled"></select>
+                                </div>
+
+
                                 <div>
                                     <label for="nivelEducativo" class="block mb-2 font-medium">Nivel Educativo</label>
                                     <select id="nivelEducativo" name="nivelEducativo" class="select-styled" required>
@@ -289,7 +304,7 @@
 
         // --- GLOBAL VARIABLES (Provided by the environment) ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'dsme-dev';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config */ };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config for local dev */ };
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // --- FIREBASE INITIALIZATION ---
@@ -416,6 +431,10 @@
                 inputs.forEach(input => {
                     if (!input.checkValidity()) {
                         allValid = false;
+                        // Highlight invalid fields
+                        input.classList.add('border-red-500');
+                    } else {
+                        input.classList.remove('border-red-500');
                     }
                 });
 
@@ -428,19 +447,126 @@
                 }
             });
             
-            // --- Other Logic (Sector, Countries) ---
+            // --- Location Logic (Countries, Departments, Municipalities) ---
+            const paisSelect = document.getElementById('pais');
+            const paisOtroContainer = document.getElementById('paisOtroContainer');
+            const paisOtroInput = document.getElementById('paisOtro');
+            
+            const ciudadContainer = document.getElementById('ciudadContainer');
+            const ciudadInput = document.getElementById('ciudad');
+
+            const departamentoContainer = document.getElementById('departamentoContainer');
+            const departamentoSelect = document.getElementById('departamento');
+
+            const municipioContainer = document.getElementById('municipioContainer');
+            const municipioSelect = document.getElementById('municipio');
+
+            let colombiaData = [];
+
+            // Fetch and load location data
+            async function loadLocationData() {
+                try {
+                    // In a real app, this would be a single API call
+                    const countriesResponse = await fetch('https://restcountries.com/v3.1/all?fields=name');
+                    let countries = await countriesResponse.json();
+                    countries = countries.map(c => c.name.common).sort();
+                    
+                    const colombiaIndex = countries.indexOf("Colombia");
+                    if (colombiaIndex > -1) {
+                         countries.splice(colombiaIndex, 1);
+                         countries.unshift("Colombia");
+                    }
+
+                    countries.push("Otro");
+                    
+                    paisSelect.innerHTML = '<option value="" disabled selected>Selecciona un país</option>';
+                    countries.forEach(country => {
+                        paisSelect.innerHTML += `<option value="${country}">${country}</option>`;
+                    });
+
+                    const colombiaResponse = await fetch('https://www.datos.gov.co/api/v1/data/955T-3R33?format=json');
+                    const rawColombiaData = await colombiaResponse.json();
+                    
+                    colombiaData = rawColombiaData.reduce((acc, item) => {
+                        const dep = item.departamento;
+                        const mun = item.municipio;
+                        if (!acc[dep]) {
+                            acc[dep] = [];
+                        }
+                        acc[dep].push(mun);
+                        return acc;
+                    }, {});
+
+                    const departamentos = Object.keys(colombiaData).sort();
+                    departamentoSelect.innerHTML = '<option value="" disabled selected>Selecciona un departamento</option>';
+                    departamentos.forEach(dep => {
+                        departamentoSelect.innerHTML += `<option value="${dep}">${dep}</option>`;
+                    });
+
+                } catch (error) {
+                    console.error("Could not load location data:", error);
+                    // Fallback to simpler country list if APIs fail
+                    const fallbackCountries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Perú", "Chile", "Ecuador", "España", "Otro"];
+                    paisSelect.innerHTML = '<option value="" disabled selected>Selecciona un país</option>';
+                    fallbackCountries.forEach(country => paisSelect.innerHTML += `<option value="${country}">${country}</option>`);
+                }
+            }
+            
+            loadLocationData();
+
+            paisSelect.addEventListener('change', (e) => {
+                const selectedCountry = e.target.value;
+
+                // Reset all fields
+                paisOtroContainer.classList.add('hidden');
+                paisOtroInput.required = false;
+                
+                ciudadContainer.classList.add('hidden');
+                ciudadInput.required = false;
+
+                departamentoContainer.classList.add('hidden');
+                departamentoSelect.required = false;
+
+                municipioContainer.classList.add('hidden');
+                municipioSelect.required = false;
+                municipioSelect.innerHTML = '';
+
+
+                if (selectedCountry === 'Colombia') {
+                    departamentoContainer.classList.remove('hidden');
+                    departamentoSelect.required = true;
+                } else if (selectedCountry === 'Otro') {
+                    paisOtroContainer.classList.remove('hidden');
+                    paisOtroInput.required = true;
+                    ciudadContainer.classList.remove('hidden');
+                    ciudadInput.required = true;
+                } else {
+                    ciudadContainer.classList.remove('hidden');
+                    ciudadInput.required = true;
+                }
+            });
+
+            departamentoSelect.addEventListener('change', (e) => {
+                const selectedDep = e.target.value;
+                const municipios = colombiaData[selectedDep].sort();
+                
+                municipioSelect.innerHTML = '<option value="" disabled selected>Selecciona un municipio</option>';
+                municipios.forEach(mun => {
+                    municipioSelect.innerHTML += `<option value="${mun}">${mun}</option>`;
+                });
+                
+                municipioContainer.classList.remove('hidden');
+                municipioSelect.required = true;
+            });
+
+
+            // --- Other Logic (Sector) ---
             const sectorSelect = document.getElementById('sector');
             const sectorOtroContainer = document.getElementById('sectorOtroContainer');
             sectorSelect.addEventListener('change', () => {
                 sectorOtroContainer.classList.toggle('hidden', sectorSelect.value !== 'otro');
                 document.getElementById('sectorOtro').required = sectorSelect.value === 'otro';
             });
-            
-            const paisSelect = document.getElementById('pais');
-            // NOTE: A more robust country list would be fetched from an API in a real application
-            const countries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Perú", "Chile", "Ecuador", "España", "Otro"];
-            countries.sort().forEach(country => paisSelect.innerHTML += `<option value="${country.toLowerCase().replace(/\s/g, '_')}">${country}</option>`);
-            paisSelect.insertAdjacentHTML('afterbegin', '<option value="" disabled selected>Selecciona un país</option>');
 
             // --- Form Submission ---
             form.addEventListener('submit', async (e) => {
@@ -459,13 +585,27 @@
                 const responses = {};
 
                 for(let [key, value] of formData.entries()) {
-                    if(key.startsWith('q')) responses[key] = parseInt(value);
-                    else demographics[key] = value;
+                    if(key.startsWith('q')) {
+                        responses[key] = parseInt(value);
+                    } else if (key !== 'paisOtro') {
+                        // Store all demographic data except the temp 'paisOtro'
+                        demographics[key] = value;
+                    }
                 }
                 
-                if (demographics.sector === 'otro') demographics.sector = demographics.sectorOtro;
+                // Consolidate location data
+                if (demographics.pais === 'Otro') {
+                    demographics.pais = formData.get('paisOtro');
+                }
+                if (demographics.pais === 'Colombia') {
+                    demographics.ciudad = demographics.municipio;
+                }
+                delete demographics.municipio;
+
+
+                if (demographics.sector === 'otro') demographics.sector = formData.get('sectorOtro');
                 delete demographics.sectorOtro;
-                delete demographics.ciudadSelect;
+                
 
                 const fullReport = {
                     appId,
@@ -492,5 +632,4 @@
     </script>
 </body>
 </html>
-
 
