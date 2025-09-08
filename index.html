@@ -120,12 +120,12 @@
             font-weight: 700;
             letter-spacing: 0.1em;
             user-select: none;
-            display: flex; /* Added for alignment */
-            align-items: center; /* Added for alignment */
+            display: flex; 
+            align-items: center; 
         }
         #captcha-text span {
             display: inline-block;
-            transition: transform 0.2s; /* Added for smooth refresh */
+            transition: transform 0.2s; 
         }
         #refresh-captcha {
             background: none;
@@ -157,19 +157,16 @@
 </head>
 <body class="antialiased">
 
-    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="https://www.caminosdelser.co" target="_blank">
                 <img src="logoprincipal.png" alt="Caminos del Ser Logo" class="h-11 w-auto">
             </a>
-            <!-- Desktop Menu -->
             <nav class="hidden md:flex items-center space-x-6">
                 <a href="https://www.caminosdelser.co" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Inicio</a>
                 <a href="BaseTeorica_PI.pdf" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Base Teórica</a>
                 <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Contacto</a>
             </nav>
-            <!-- Mobile Menu Button -->
             <div class="md:hidden">
                 <button id="hamburger-button" class="text-gray-600 hover:text-[#003366] focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,7 +175,6 @@
                 </button>
             </div>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <a href="https://www.caminosdelser.co" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Inicio</a>
             <a href="BaseTeorica_PI.pdf" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Base Teórica</a>
@@ -186,26 +182,21 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <main id="instrumento" class="container mx-auto px-6 py-16 text-center">
         <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Diagnóstico de Salud Mental para el Emprendedor</h1>
         <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">Una herramienta diseñada para iluminar tu bienestar, fortalecer tu resiliencia y asegurar tu sostenibilidad en el desafiante camino de emprender.</p>
         <p class="text-2xl italic text-gray-800 mb-10">"Que el cielo sea el límite, no tu mente"</p>
     </main>
 
-    <!-- Instrumento Section -->
     <section class="py-16 bg-gray-50 -mt-16 pt-0">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
-                <form id="dsmeForm" novalidate> <!-- novalidate prevents default browser popups -->
-                    <!-- PASO 1: Demographics -->
-                    <div id="demographicsContainer">
+                <form id="dsmeForm" novalidate> <div id="demographicsContainer">
                         <div class="card">
                             <h2 class="text-3xl font-bold mb-4">Paso 1: Información General</h2>
                             <p class="mb-6">Comencemos con algunos datos básicos. Esta información es confidencial y nos ayudará a contextualizar tus resultados.</p>
                         
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Datos Personales -->
                                 <div><label for="nombreCompleto" class="block mb-2 font-medium">Nombre Completo</label><input type="text" id="nombreCompleto" name="nombreCompleto" class="input-styled" required></div>
                                 <div><label for="email" class="block mb-2 font-medium">Correo Electrónico</label><input type="email" id="email" name="email" class="input-styled" required></div>
                                 <div><label for="edad" class="block mb-2 font-medium">Edad</label><input type="number" id="edad" name="edad" class="input-styled" required min="15"></div>
@@ -223,12 +214,7 @@
                                     <label for="pais" class="block mb-2 font-medium">País de Residencia</label>
                                     <select id="pais" name="pais" class="select-styled" required></select>
                                 </div>
-                                <div id="paisOtroContainer" class="hidden">
-                                    <label for="paisOtro" class="block mb-2 font-medium">Por favor, especifica tu país</label>
-                                    <input type="text" id="paisOtro" name="paisOtro" class="input-styled">
-                                </div>
                                 
-                                <!-- Location fields -->
                                 <div id="ciudadContainer" class="hidden">
                                     <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
                                     <input type="text" id="ciudad" name="ciudad" class="input-styled">
@@ -241,7 +227,6 @@
                                     <label for="municipio" class="block mb-2 font-medium">Municipio / Ciudad</label>
                                     <select id="municipio" name="municipio" class="select-styled"></select>
                                 </div>
-
 
                                 <div>
                                     <label for="nivelEducativo" class="block mb-2 font-medium">Nivel Educativo</label>
@@ -336,18 +321,15 @@
                         </div>
                     </div>
 
-                    <!-- PASO 2: Cuestionario -->
                     <div id="questionsContainer" class="hidden">
                         <div class="card">
                             <h2 class="text-3xl font-bold mb-2">Paso 2: Cuestionario de Pilares</h2>
                             <p class="mb-6 text-sm text-gray-500">Indica tu grado de acuerdo con cada afirmación.</p>
                             
-                            <div id="questions-container"></div>
+                            <div id="questions-list"></div>
                             
-                            <!-- Privacy Policy and Captcha -->
                             <div class="mt-12 space-y-8">
                                 <div id="final-validation-error" class="text-red-600 text-center font-semibold hidden">Por favor, responde todas las preguntas antes de continuar.</div>
-                                <!-- Privacy Policy Checkbox -->
                                 <div class="flex items-center justify-center">
                                     <input type="checkbox" id="privacy-policy" name="privacy-policy" class="h-4 w-4 text-[#003366] border-gray-300 rounded focus:ring-[#003366]">
                                     <label for="privacy-policy" class="ml-2 block text-sm text-gray-900">
@@ -355,7 +337,6 @@
                                     </label>
                                 </div>
 
-                                <!-- Captcha -->
                                 <div id="captcha-container">
                                     <div id="captcha-text"></div>
                                     <input type="number" id="captcha-input" class="input-styled w-24 text-center text-lg" placeholder="=">
@@ -368,7 +349,6 @@
                                 <div id="captcha-error" class="text-red-600 text-center text-sm hidden">Respuesta incorrecta. Por favor, intenta de nuevo.</div>
                             </div>
 
-
                             <div class="mt-12 text-center">
                                 <button type="submit" id="submitButton" class="btn-brand text-lg" disabled>Finalizar y Enviar</button>
                             </div>
@@ -379,14 +359,12 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-[#1a1a1a] text-white py-8">
         <div class="container mx-auto text-center">
             <p class="text-gray-400">&copy; 2025 Jorge Arango Castaño - Caminos del Ser. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <!-- Cookie Banner -->
     <div id="cookie-banner" class="hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50">
         <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-sm text-center md:text-left">
@@ -402,13 +380,19 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // --- GLOBAL VARIABLES (Provided by the environment) ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dsme-dev';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config for local dev */ };
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // --- FIREBASE CONFIGURATION (Placeholder) ---
+        const firebaseConfig = {
+            // Replace with your actual Firebase config
+            apiKey: "AIzaSy...",
+            authDomain: "your-project-id.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project-id.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
 
         // --- FIREBASE INITIALIZATION ---
         let app, auth, db;
@@ -416,19 +400,12 @@
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
-            setLogLevel('debug');
             
-            onAuthStateChanged(auth, async (user) => {
+            onAuthStateChanged(auth, (user) => {
                 if (!user) {
-                     try {
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (error) {
-                        console.error("Authentication failed:", error);
-                    }
+                    signInAnonymously(auth).catch((error) => {
+                        console.error("Anonymous sign-in failed:", error);
+                    });
                 }
             });
         } catch(e) { console.error("Error initializing Firebase:", e); }
@@ -438,35 +415,144 @@
             const demographicsContainer = document.getElementById('demographicsContainer');
             const questionsContainer = document.getElementById('questionsContainer');
             const continueButton = document.getElementById('continueButton');
-            const questionsDisplay = document.getElementById('questions-container');
+            const questionsList = document.getElementById('questions-list');
             const submitButton = document.getElementById('submitButton');
             const hamburgerButton = document.getElementById('hamburger-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const finalValidationError = document.getElementById('final-validation-error');
-
+            const privacyPolicyCheckbox = document.getElementById('privacy-policy');
+            
             // --- Mobile Menu Logic ---
             hamburgerButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
-            // --- End Mobile Menu Logic ---
-
 
             // --- Cookie Banner Logic ---
             const cookieBanner = document.getElementById('cookie-banner');
             const acceptCookiesButton = document.getElementById('accept-cookies');
-
             if (!localStorage.getItem('cookies_accepted')) {
                 cookieBanner.classList.remove('hidden');
                 cookieBanner.classList.add('animate-fade-in-up');
             }
-
             acceptCookiesButton.addEventListener('click', () => {
                 localStorage.setItem('cookies_accepted', 'true');
                 cookieBanner.style.display = 'none';
             });
-            // --- End Cookie Banner Logic ---
 
+            // --- Location Logic ---
+            const paisSelect = document.getElementById('pais');
+            const ciudadContainer = document.getElementById('ciudadContainer');
+            const departamentoContainer = document.getElementById('departamentoContainer');
+            const municipioContainer = document.getElementById('municipioContainer');
+            const departamentoSelect = document.getElementById('departamento');
+            const municipioSelect = document.getElementById('municipio');
+            let colombiaData = [];
 
+            // Static country list
+            const paises = [
+                { name: 'Selecciona un país', value: '' },
+                { name: 'Colombia', value: 'Colombia' },
+                { name: 'Estados Unidos', value: 'Estados Unidos' },
+                { name: 'Canadá', value: 'Canadá' },
+                { name: 'México', value: 'México' },
+                { name: '--- Centroamérica ---', value: '', disabled: true },
+                { name: 'Costa Rica', value: 'Costa Rica' },
+                { name: 'El Salvador', value: 'El Salvador' },
+                { name: 'Guatemala', value: 'Guatemala' },
+                { name: 'Honduras', value: 'Honduras' },
+                { name: 'Nicaragua', value: 'Nicaragua' },
+                { name: 'Panamá', value: 'Panamá' },
+                { name: '--- Sudamérica ---', value: '', disabled: true },
+                { name: 'Argentina', value: 'Argentina' },
+                { name: 'Bolivia', value: 'Bolivia' },
+                { name: 'Brasil', value: 'Brasil' },
+                { name: 'Chile', value: 'Chile' },
+                { name: 'Ecuador', value: 'Ecuador' },
+                { name: 'Paraguay', value: 'Paraguay' },
+                { name: 'Perú', value: 'Perú' },
+                { name: 'Uruguay', value: 'Uruguay' },
+                { name: 'Venezuela', value: 'Venezuela' }
+            ];
+
+            paises.forEach(pais => {
+                const option = document.createElement('option');
+                option.value = pais.value;
+                option.textContent = pais.name;
+                if (pais.disabled) option.disabled = true;
+                paisSelect.appendChild(option);
+            });
+
+            async function cargarDatosColombia() {
+                try {
+                    const response = await fetch('https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.json');
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    colombiaData = await response.json();
+                    colombiaData.sort((a, b) => a.departamento.localeCompare(b.departamento));
+                } catch (error) {
+                    console.error('Error fetching Colombia data:', error);
+                }
+            }
+
+            function cargarDepartamentos() {
+                departamentoSelect.innerHTML = '<option value="" disabled selected>Selecciona un departamento</option>';
+                const departamentos = [...new Set(colombiaData.map(d => d.departamento))].sort();
+                departamentos.forEach(dep => {
+                    const option = document.createElement('option');
+                    option.value = dep;
+                    option.textContent = dep;
+                    departamentoSelect.appendChild(option);
+                });
+            }
+
+            function cargarMunicipios(departamento) {
+                municipioSelect.innerHTML = '<option value="" disabled selected>Selecciona un municipio</option>';
+                const municipios = colombiaData.find(d => d.departamento === departamento)?.ciudades || [];
+                municipios.sort().forEach(mun => {
+                    const option = document.createElement('option');
+                    option.value = mun;
+                    option.textContent = mun;
+                    municipioSelect.appendChild(option);
+                });
+            }
+            
+            paisSelect.addEventListener('change', () => {
+                const selectedPais = paisSelect.value;
+                ciudadContainer.classList.add('hidden');
+                departamentoContainer.classList.add('hidden');
+                municipioContainer.classList.add('hidden');
+
+                if (selectedPais === 'Colombia') {
+                    if (colombiaData.length === 0) {
+                        cargarDatosColombia().then(() => {
+                            cargarDepartamentos();
+                            departamentoContainer.classList.remove('hidden');
+                        });
+                    } else {
+                        cargarDepartamentos();
+                        departamentoContainer.classList.remove('hidden');
+                    }
+                } else if (selectedPais) {
+                    ciudadContainer.classList.remove('hidden');
+                }
+            });
+
+            departamentoSelect.addEventListener('change', () => {
+                cargarMunicipios(departamentoSelect.value);
+                municipioContainer.classList.remove('hidden');
+            });
+            
+            // --- Sector Logic ---
+            const sectorSelect = document.getElementById('sector');
+            const sectorOtroContainer = document.getElementById('sectorOtroContainer');
+            sectorSelect.addEventListener('change', () => {
+                if(sectorSelect.value === 'otro') {
+                    sectorOtroContainer.classList.remove('hidden');
+                } else {
+                    sectorOtroContainer.classList.add('hidden');
+                }
+            });
+            
+            // --- Question Generation ---
             const questions = [
                 // Pilar 1
                 { pilar: 1, text: "Considero que los contratiempos y \"fracasos\" son oportunidades valiosas de aprendizaje." },
@@ -476,7 +562,7 @@
                 { pilar: 1, text: "Un revés importante en mi proyecto me hace dudar de todas mis capacidades.", reverse: true },
                 { pilar: 1, text: "Mantengo una visión optimista y proactiva, incluso en momentos de crisis." },
                 { pilar: 1, text: "Me cuesta mucho recuperarme emocionalmente después de una crítica dura o un rechazo.", reverse: true },
-                 // Pilar 2
+                // Pilar 2
                 { pilar: 2, text: "Mi sentido de valía personal es independiente del éxito o fracaso de mi empresa." },
                 { pilar: 2, text: "Si mi empresa fracasara, sentiría que he fracasado como persona.", reverse: true },
                 { pilar: 2, text: "Tengo pasiones e intereses significativos que cultivo activamente fuera de mi rol como emprendedor." },
@@ -485,5 +571,227 @@
                 { pilar: 2, text: "Concibo mi empresa como un proyecto importante en mi vida, pero no como mi vida entera." },
                 { pilar: 2, text: "Las métricas de mi negocio (ingresos, crecimiento, etc.) impactan directamente en mi estado de ánimo y autoestima diarios.", reverse: true },
                 // Pilar 3
-                { pilar: 3, text: "Priorizo mis horas de sueño, entendiendo que son cruci"
+                { pilar: 3, text: "Priorizo mis horas de sueño, entendiendo que son cruciales para mi rendimiento." },
+                { pilar: 3, text: "A menudo sacrifico mi alimentación o el ejercicio por atender urgencias del trabajo.", reverse: true },
+                { pilar: 3, text: "Establezco y respeto límites claros para desconectar mentalmente del trabajo al final del día." },
+                { pilar: 3, text: "Siento un agotamiento constante que no se alivia ni siquiera después de un fin de semana.", reverse: true },
+                { pilar: 3, text: "Dedico tiempo de forma regular a actividades que me \"recargan las baterías\" y no tienen que ver con el trabajo." },
+                { pilar: 3, text: "Soy capaz de delegar tareas eficazmente para proteger mi energía y enfocarme en lo estratégico." },
+                { pilar: 3, text: "La idea de tomar unas vacaciones reales, completamente desconectado/a, me genera más estrés que alivio.", reverse: true },
+                // Pilar 4
+                { pilar: 4, text: "Tengo un círculo de confianza (amigos, familia, pareja) con el que puedo hablar abiertamente de mis miedos." },
+                { pilar: 4, text: "Siento que la mayor parte del tiempo estoy solo/a en la toma de las decisiones más difíciles.", reverse: true },
+                { pilar: 4, text: "Busco activamente el consejo de mentores u otros emprendedores que han pasado por desafíos similares." },
+                { pilar: 4, text: "Evito compartir mis problemas para mantener una imagen de fortaleza y control frente a los demás.", reverse: true },
+                { pilar: 4, text: "Invierto tiempo de calidad en mis relaciones personales, incluso en las épocas de más trabajo." },
+                { pilar: 4, text: "Siento que mi equipo y socios me apoyan no solo como profesional, sino también como persona." },
+                { pilar: 4, text: "Me he distanciado de personas importantes en mi vida a causa de la dedicación a mi empresa.", reverse: true },
+                // Pilar 5
+                { pilar: 5, text: "Tomo decisiones financieras desde la estrategia y el análisis, no desde el pánico o la euforia." },
+                { pilar: 5, text: "La situación del flujo de caja de la empresa me quita el sueño de forma recurrente.", reverse: true },
+                { pilar: 5, text: "Confío en mi habilidad para generar recursos, incluso si enfrento una crisis económica." },
+                { pilar: 5, text: "Mi relación con el dinero es de herramienta y oportunidad, no de miedo y escasez." },
+                { pilar: 5, text: "Siento una fuerte ansiedad al revisar las finanzas de la empresa, independientemente de los resultados.", reverse: true },
+                { pilar: 5, text: "Soy capaz de asumir riesgos financieros calculados sin que esto afecte gravemente mi paz mental." },
+                { pilar: 5, text: "Comparo constantemente mi situación financiera con la de otros emprendedores, lo que me genera frustración.", reverse: true }
+            ];
 
+            const pilarTitles = ["", "Pilar 1: Resiliencia y Gestión de la Incertidumbre", "Pilar 2: Vínculo Identitario (Fundador ↔ Empresa)", "Pilar 3: Sostenibilidad y Energía Personal", "Pilar 4: Capital Social y Red de Apoyo", "Pilar 5: Psicología Financiera"];
+            let currentPilar = 0;
+
+            questions.forEach((q, index) => {
+                if (q.pilar !== currentPilar) {
+                    currentPilar = q.pilar;
+                    const pilarTitle = document.createElement('h3');
+                    pilarTitle.className = 'text-xl font-bold mt-8 mb-4 border-t pt-6';
+                    pilarTitle.textContent = pilarTitles[currentPilar];
+                    questionsList.appendChild(pilarTitle);
+                }
+
+                const questionBlock = document.createElement('div');
+                questionBlock.className = 'question-block';
+                questionBlock.id = `question-block-${index}`;
+
+                const questionText = document.createElement('p');
+                questionText.className = 'text-lg font-medium mb-3';
+                questionText.textContent = `${index + 1}. ${q.text}`;
+                questionBlock.appendChild(questionText);
+
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'options-grid';
+                const options = [
+                    { value: 1, text: 'Totalmente en desacuerdo' },
+                    { value: 2, text: 'En desacuerdo' },
+                    { value: 3, text: 'Neutral' },
+                    { value: 4, text: 'De acuerdo' },
+                    { value: 5, text: 'Totalmente de acuerdo' }
+                ];
+
+                options.forEach(opt => {
+                    const radioId = `q${index}_${opt.value}`;
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.id = radioId;
+                    input.name = `q${index}`;
+                    input.value = opt.value;
+                    input.required = true;
+                    optionsGrid.appendChild(input);
+
+                    const label = document.createElement('label');
+                    label.htmlFor = radioId;
+                    label.textContent = opt.text;
+                    optionsGrid.appendChild(label);
+                });
+                questionBlock.appendChild(optionsGrid);
+                questionsList.appendChild(questionBlock);
+            });
+            
+            // --- Captcha Logic ---
+            const captchaText = document.getElementById('captcha-text');
+            const captchaInput = document.getElementById('captcha-input');
+            const refreshCaptchaButton = document.getElementById('refresh-captcha');
+            const captchaContainer = document.getElementById('captcha-container');
+            let captchaAnswer = 0;
+
+            function generateCaptcha() {
+                const num1 = Math.floor(Math.random() * 10) + 1;
+                const num2 = Math.floor(Math.random() * 10) + 1;
+                captchaAnswer = num1 + num2;
+                
+                captchaText.innerHTML = ''; // Clear previous
+                `${num1} + ${num2}`.split('').forEach(char => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    if(char !== ' ' && char !== '+') { // Only rotate numbers
+                        span.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+                    }
+                    captchaText.appendChild(span);
+                });
+                captchaInput.value = '';
+            }
+            refreshCaptchaButton.addEventListener('click', generateCaptcha);
+            
+            // --- Form Flow & Validation Logic ---
+            continueButton.addEventListener('click', () => {
+                let firstInvalidField = null;
+                const requiredFields = demographicsContainer.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    field.style.borderColor = '#d1d5db'; // Reset border
+                    if ((field.type === 'select-one' && field.value === '') || (field.type !== 'select-one' && !field.checkValidity())) {
+                         field.style.borderColor = '#ef4444'; // Red border
+                         if (!firstInvalidField) firstInvalidField = field;
+                    }
+                });
+
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                    firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    demographicsContainer.classList.add('hidden');
+                    questionsContainer.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    generateCaptcha();
+                }
+            });
+            
+            privacyPolicyCheckbox.addEventListener('change', () => {
+                submitButton.disabled = !privacyPolicyCheckbox.checked;
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
+
+                // 1. Validate all questions are answered
+                let allAnswered = true;
+                let firstUnanswered = null;
+                questions.forEach((_, index) => {
+                    const block = document.getElementById(`question-block-${index}`);
+                    const answered = form.querySelector(`input[name="q${index}"]:checked`);
+                    if (!answered) {
+                        allAnswered = false;
+                        block.classList.add('error');
+                        if (!firstUnanswered) firstUnanswered = block;
+                    } else {
+                        block.classList.remove('error');
+                    }
+                });
+
+                if (!allAnswered) {
+                    finalValidationError.classList.remove('hidden');
+                    firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Finalizar y Enviar';
+                    return;
+                }
+                finalValidationError.classList.add('hidden');
+
+                // 2. Validate Captcha
+                const captchaErrorMsg = document.getElementById('captcha-error');
+                if (parseInt(captchaInput.value) !== captchaAnswer) {
+                    captchaErrorMsg.classList.remove('hidden');
+                    captchaContainer.classList.add('shake');
+                    setTimeout(() => captchaContainer.classList.remove('shake'), 500);
+                    generateCaptcha();
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Finalizar y Enviar';
+                    return;
+                }
+                captchaErrorMsg.classList.add('hidden');
+
+                // 3. Process data
+                const formData = new FormData(form);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                
+                const demograficos = {
+                    nombre: data.nombreCompleto,
+                    email: data.email,
+                    edad: data.edad,
+                    genero: data.genero,
+                    pais: data.pais === 'Colombia' ? 'Colombia' : data.pais,
+                    ciudad: data.pais === 'Colombia' ? `${data.municipio}, ${data.departamento}` : data.ciudad,
+                    nivelEducativo: data.nivelEducativo,
+                    estadoCivil: data.estadoCivil,
+                    hijos: data.hijos,
+                    mascotas: data.mascotas
+                };
+                
+                const empresa = {
+                    nombre: data.nombreEmpresa,
+                    cargo: data.cargo,
+                    numEmpleados: data.numEmpleados,
+                    tiempoConstitucion: data.tiempoConstitucion,
+                    sector: data.sector === 'otro' ? data.sectorOtro : data.sector
+                };
+                
+                const respuestas = {};
+                questions.forEach((_, index) => {
+                    respuestas[`q${index}`] = parseInt(data[`q${index}`]);
+                });
+
+                const finalData = { demograficos, empresa, respuestas, createdAt: new Date().toISOString() };
+                
+                // 4. Save to Firestore
+                try {
+                    await addDoc(collection(db, "dsme-reports"), finalData);
+                    
+                    // 5. Save to Session Storage and Redirect
+                    sessionStorage.setItem('dsmeResults', JSON.stringify(finalData));
+                    window.location.href = 'rdsme.html';
+
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert('Hubo un error al guardar tus respuestas. Por favor, intenta de nuevo.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Finalizar y Enviar';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
