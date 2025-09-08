@@ -11,8 +11,8 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #F8F7F2; /* Un tono crema/huso suave */
-            color: #4A4A4A; /* Un gris oscuro más suave que el negro puro */
+            background-color: #F8F7F2;
+            color: #4A4A4A;
         }
         h1, h2, h3 {
             font-family: 'Poppins', sans-serif;
@@ -20,7 +20,7 @@
             font-weight: 700;
         }
         .btn-brand {
-            background-color: #003366; /* Un azul corporativo oscuro y profesional */
+            background-color: #003366;
             color: white;
             padding: 12px 30px;
             border-radius: 9999px;
@@ -29,7 +29,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .btn-brand:hover {
-            background-color: #002244; /* Un azul más oscuro al pasar el mouse */
+            background-color: #002244;
             transform: translateY(-2px);
             box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
         }
@@ -65,13 +65,11 @@
             border-radius: 8px;
         }
         .question-block.error {
-            background-color: #fee2e2; /* Red highlight for unanswered questions */
+            background-color: #fee2e2;
         }
         .question-block:last-child {
             border-bottom: none;
         }
-        
-        /* New styles for button-like radio options */
         .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -79,7 +77,7 @@
             margin-top: 0.75rem;
         }
         .options-grid input[type="radio"] {
-            display: none; /* Oculta el radio button real */
+            display: none;
         }
         .options-grid label {
             text-align: center;
@@ -100,8 +98,6 @@
             border-color: #003366;
             font-weight: 600;
         }
-        
-        /* Captcha Styles */
         #captcha-container {
             display: flex;
             align-items: center;
@@ -132,17 +128,9 @@
             border: none;
             cursor: pointer;
         }
-
-        /* Animations */
         @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up {
             animation: fade-in-up 0.5s ease-out forwards;
@@ -163,13 +151,11 @@
             <a href="https://www.caminosdelser.co" target="_blank">
                 <img src="logoprincipal.png" alt="Caminos del Ser Logo" class="h-11 w-auto">
             </a>
-            <!-- Desktop Menu -->
             <nav class="hidden md:flex items-center space-x-6">
                 <a href="https://www.caminosdelser.co" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Inicio</a>
                 <a href="BaseTeorica_PI.pdf" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Base Teórica</a>
                 <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Contacto</a>
             </nav>
-            <!-- Mobile Menu Button -->
             <div class="md:hidden">
                 <button id="hamburger-button" class="text-gray-600 hover:text-[#003366] focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,7 +164,6 @@
                 </button>
             </div>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <a href="https://www.caminosdelser.co" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Inicio</a>
             <a href="BaseTeorica_PI.pdf" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Base Teórica</a>
@@ -197,7 +182,7 @@
     <section class="py-16 bg-gray-50 -mt-16 pt-0">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
-                <form id="dsmeForm" novalidate> <!-- novalidate prevents default browser popups -->
+                <form id="dsmeForm" novalidate>
                     <!-- PASO 1: Demographics -->
                     <div id="demographicsContainer">
                         <div class="card">
@@ -205,7 +190,6 @@
                             <p class="mb-6">Comencemos con algunos datos básicos. Esta información es confidencial y nos ayudará a contextualizar tus resultados.</p>
                         
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Datos Personales -->
                                 <div><label for="nombreCompleto" class="block mb-2 font-medium">Nombre Completo</label><input type="text" id="nombreCompleto" name="nombreCompleto" class="input-styled" required></div>
                                 <div><label for="email" class="block mb-2 font-medium">Correo Electrónico</label><input type="email" id="email" name="email" class="input-styled" required></div>
                                 <div><label for="edad" class="block mb-2 font-medium">Edad</label><input type="number" id="edad" name="edad" class="input-styled" required min="15"></div>
@@ -223,8 +207,6 @@
                                     <label for="pais" class="block mb-2 font-medium">País de Residencia</label>
                                     <select id="pais" name="pais" class="select-styled" required></select>
                                 </div>
-                                
-                                <!-- Location fields -->
                                 <div id="ciudadContainer" class="hidden">
                                     <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
                                     <input type="text" id="ciudad" name="ciudad" class="input-styled">
@@ -237,7 +219,6 @@
                                     <label for="municipio" class="block mb-2 font-medium">Municipio / Ciudad</label>
                                     <select id="municipio" name="municipio" class="select-styled"></select>
                                 </div>
-
                                 <div>
                                     <label for="nivelEducativo" class="block mb-2 font-medium">Nivel Educativo</label>
                                     <select id="nivelEducativo" name="nivelEducativo" class="select-styled" required>
@@ -336,21 +317,15 @@
                         <div class="card">
                             <h2 class="text-3xl font-bold mb-2">Paso 2: Cuestionario de Pilares</h2>
                             <p class="mb-6 text-sm text-gray-500">Indica tu grado de acuerdo con cada afirmación.</p>
-                            
                             <div id="questions-list"></div>
-                            
-                            <!-- Privacy Policy and Captcha -->
                             <div class="mt-12 space-y-8">
                                 <div id="final-validation-error" class="text-red-600 text-center font-semibold hidden">Por favor, responde todas las preguntas antes de continuar.</div>
-                                <!-- Privacy Policy Checkbox -->
                                 <div class="flex items-center justify-center">
                                     <input type="checkbox" id="privacy-policy" name="privacy-policy" class="h-4 w-4 text-[#003366] border-gray-300 rounded focus:ring-[#003366]">
                                     <label for="privacy-policy" class="ml-2 block text-sm text-gray-900">
                                         He leído y acepto la <a href="https://www.caminosdelser.co/politicadatos.html" target="_blank" class="font-medium text-[#003366] hover:underline">política de privacidad y tratamiento de datos.</a>
                                     </label>
                                 </div>
-
-                                <!-- Captcha -->
                                 <div id="captcha-container">
                                     <div id="captcha-text"></div>
                                     <input type="number" id="captcha-input" class="input-styled w-24 text-center text-lg" placeholder="=">
@@ -362,11 +337,7 @@
                                 </div>
                                 <div id="captcha-error" class="text-red-600 text-center text-sm hidden">Respuesta incorrecta. Por favor, intenta de nuevo.</div>
                             </div>
-                            
-                            <!-- DIV para mostrar errores de guardado -->
-                            <div id="firestore-error-message" class="hidden mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-center">
-                            </div>
-
+                            <div id="server-error-message" class="hidden mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-center"></div>
                             <div class="mt-8 text-center">
                                 <button type="submit" id="submitButton" class="btn-brand text-lg" disabled>Finalizar y Enviar</button>
                             </div>
@@ -398,63 +369,7 @@
     </div>
     
     <script type="module">
-        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // --- GLOBAL VARIABLES & DIAGNOSTIC ---
-        const appId = 'dsm'; 
-        const firebaseConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        console.log("--- INICIANDO DIAGNÓSTICO DE CONEXIÓN ---");
-        if (firebaseConfigRaw) {
-            console.log("✅ La variable '__firebase_config' fue recibida desde Vercel.");
-            try {
-                const parsedConfig = JSON.parse(firebaseConfigRaw);
-                console.log("✅ El contenido de la configuración es un JSON válido.");
-                console.log("projectId detectado:", parsedConfig.projectId);
-            } catch (e) {
-                console.error("❌ ERROR: La variable '__firebase_config' fue recibida, pero NO es un JSON válido. Revisa el valor copiado en Vercel.", e);
-                console.log("Contenido recibido:", firebaseConfigRaw);
-            }
-        } else {
-            console.error("❌ ERROR CRÍTICO: La variable '__firebase_config' NO fue recibida desde Vercel. Asegúrate de que esté creada y con el nombre correcto en la configuración del proyecto.");
-        }
-        console.log("--- FIN DEL DIAGNÓSTICO ---");
-
-        const firebaseConfig = firebaseConfigRaw ? JSON.parse(firebaseConfigRaw) : {};
-
-        // --- FIREBASE INITIALIZATION ---
-        let app, auth, db;
-
-        if (Object.keys(firebaseConfig).length === 0) {
-            console.error("Firebase config is empty, initialization skipped.");
-            db = null; // Ensure db is null if config is missing
-        } else {
-            try {
-                app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-                auth = getAuth(app);
-                db = getFirestore(app);
-                
-                onAuthStateChanged(auth, async (user) => {
-                    if (!user) {
-                         try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
-                        } catch (error) {
-                            console.error("Authentication failed:", error);
-                        }
-                    }
-                });
-            } catch(e) { 
-                console.error("Error al inicializar Firebase:", e); 
-                db = null;
-            }
-        }
+        // NO FIREBASE IMPORTS ON THE FRONTEND
         
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('dsmeForm');
@@ -467,7 +382,7 @@
             const mobileMenu = document.getElementById('mobile-menu');
             const finalValidationError = document.getElementById('final-validation-error');
             const privacyPolicyCheckbox = document.getElementById('privacy-policy');
-            const firestoreErrorDiv = document.getElementById('firestore-error-message');
+            const serverErrorDiv = document.getElementById('server-error-message');
             
             // --- Mobile Menu Logic ---
             hamburgerButton.addEventListener('click', () => {
@@ -703,11 +618,11 @@
                 const num2 = Math.floor(Math.random() * 10) + 1;
                 captchaAnswer = num1 + num2;
                 
-                captchaText.innerHTML = ''; // Clear previous
+                captchaText.innerHTML = '';
                 `${num1} + ${num2}`.split('').forEach(char => {
                     const span = document.createElement('span');
                     span.textContent = char;
-                    if(char !== ' ' && char !== '+') { // Only rotate numbers
+                    if(char !== ' ' && char !== '+') {
                         span.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
                     }
                     captchaText.appendChild(span);
@@ -722,9 +637,9 @@
                 const requiredFields = demographicsContainer.querySelectorAll('[required]');
                 
                 requiredFields.forEach(field => {
-                    field.style.borderColor = '#d1d5db'; // Reset border
+                    field.style.borderColor = '#d1d5db';
                     if ((field.type === 'select-one' && field.value === '') || (field.type !== 'select-one' && !field.checkValidity())) {
-                         field.style.borderColor = '#ef4444'; // Red border
+                         field.style.borderColor = '#ef4444';
                          if (!firstInvalidField) firstInvalidField = field;
                     }
                 });
@@ -746,11 +661,11 @@
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                firestoreErrorDiv.classList.add('hidden'); // Hide previous errors
+                serverErrorDiv.classList.add('hidden');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Enviando...';
 
-                // 1. Validate all questions are answered
+                // 1. Validate questions
                 let allAnswered = true;
                 let firstUnanswered = null;
                 questions.forEach((_, index) => {
@@ -795,22 +710,15 @@
                 }
                 
                 const demograficos = {
-                    nombre: data.nombreCompleto,
-                    email: data.email,
-                    edad: data.edad,
-                    genero: data.genero,
-                    pais: data.pais,
+                    nombre: data.nombreCompleto, email: data.email, edad: data.edad,
+                    genero: data.genero, pais: data.pais,
                     ciudad: data.pais === 'Colombia' ? `${data.municipio}, ${data.departamento}` : data.ciudad,
-                    nivelEducativo: data.nivelEducativo,
-                    estadoCivil: data.estadoCivil,
-                    hijos: data.hijos,
-                    mascotas: data.mascotas
+                    nivelEducativo: data.nivelEducativo, estadoCivil: data.estadoCivil,
+                    hijos: data.hijos, mascotas: data.mascotas
                 };
                 
                 const empresa = {
-                    nombre: data.nombreEmpresa,
-                    cargo: data.cargo,
-                    numEmpleados: data.numEmpleados,
+                    nombre: data.nombreEmpresa, cargo: data.cargo, numEmpleados: data.numEmpleados,
                     tiempoConstitucion: data.tiempoConstitucion,
                     sector: data.sector === 'otro' ? data.sectorOtro : data.sector
                 };
@@ -820,24 +728,27 @@
                     respuestas[`q${index}`] = parseInt(data[`q${index}`]);
                 });
 
-                const finalData = { demograficos, empresa, respuestas, createdAt: new Date().toISOString() };
+                const finalData = { demograficos, empresa, respuestas };
                 
-                // 4. Save to Firestore
+                // 4. Send to Serverless Function
                 try {
-                    if (!db) {
-                        throw new Error("La conexión con la base de datos no está disponible. Revisa la consola para más detalles.");
-                    }
-                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'dsme-reports');
-                    await addDoc(collectionRef, finalData);
-                    
-                    // 5. Save to Session Storage and Redirect
-                    sessionStorage.setItem('dsmeResults', JSON.stringify(finalData));
-                    window.location.href = 'rdsme.html';
+                    const response = await fetch('/api/enviar-reporte-dsme', {
+                        method: 'POST',
+                        body: JSON.stringify(finalData),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
 
+                    if (response.ok) {
+                        sessionStorage.setItem('dsmeResults', JSON.stringify(finalData));
+                        window.location.href = 'rdsme.html';
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Hubo un problema en el servidor.');
+                    }
                 } catch (error) {
-                    console.error("Error adding document: ", error);
-                    firestoreErrorDiv.textContent = `Hubo un error al guardar tus respuestas. Por favor, intenta de nuevo. Detalle: ${error.message}`;
-                    firestoreErrorDiv.classList.remove('hidden');
+                    console.error("Error sending report:", error);
+                    serverErrorDiv.textContent = `Hubo un error al guardar tus respuestas. Detalle: ${error.message}`;
+                    serverErrorDiv.classList.remove('hidden');
                     submitButton.disabled = false;
                     submitButton.textContent = 'Finalizar y Enviar';
                 }
