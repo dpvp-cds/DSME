@@ -402,16 +402,35 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // --- GLOBAL VARIABLES (Provided by the environment) ---
+        // --- GLOBAL VARIABLES & DIAGNOSTIC ---
         const appId = 'dsm'; 
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const firebaseConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        console.log("--- INICIANDO DIAGNÓSTICO DE CONEXIÓN ---");
+        if (firebaseConfigRaw) {
+            console.log("✅ La variable '__firebase_config' fue recibida desde Vercel.");
+            try {
+                const parsedConfig = JSON.parse(firebaseConfigRaw);
+                console.log("✅ El contenido de la configuración es un JSON válido.");
+                console.log("projectId detectado:", parsedConfig.projectId);
+            } catch (e) {
+                console.error("❌ ERROR: La variable '__firebase_config' fue recibida, pero NO es un JSON válido. Revisa el valor copiado en Vercel.", e);
+                console.log("Contenido recibido:", firebaseConfigRaw);
+            }
+        } else {
+            console.error("❌ ERROR CRÍTICO: La variable '__firebase_config' NO fue recibida desde Vercel. Asegúrate de que esté creada y con el nombre correcto en la configuración del proyecto.");
+        }
+        console.log("--- FIN DEL DIAGNÓSTICO ---");
+
+        const firebaseConfig = firebaseConfigRaw ? JSON.parse(firebaseConfigRaw) : {};
 
         // --- FIREBASE INITIALIZATION ---
         let app, auth, db;
 
         if (Object.keys(firebaseConfig).length === 0) {
-            console.error("ERROR CRÍTICO: La configuración de Firebase ('__firebase_config') no se ha cargado. Revisa las variables de entorno en Vercel.");
+            console.error("Firebase config is empty, initialization skipped.");
+            db = null; // Ensure db is null if config is missing
         } else {
             try {
                 app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
