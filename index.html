@@ -800,7 +800,8 @@
 
                 } catch (error) {
                     console.error("Error adding document: ", error);
-                    alert('Hubo un error al guardar tus respuestas. Por favor, intenta de nuevo.');
+                    // MODIFICACIÓN: La alerta ahora muestra el mensaje de error específico.
+                    alert(`Hubo un error al guardar tus respuestas. Por favor, intenta de nuevo.\n\nDetalle del error: ${error.message}`);
                     submitButton.disabled = false;
                     submitButton.textContent = 'Finalizar y Enviar';
                 }
@@ -809,3 +810,4 @@
     </script>
 </body>
 </html>
+
