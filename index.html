@@ -253,200 +253,52 @@
             <p class="text-gray-400">&copy; 2025 Jorge Arango Castaño - Caminos del Ser. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50 animate-fade-in-up">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-sm text-center md:text-left">
+                Este sitio web utiliza cookies para mejorar tu experiencia. Al continuar navegando, aceptas su uso. 
+                Para más información, consulta nuestra <a href="politicadatos.html" target="_blank" class="font-semibold underline hover:text-gray-300 transition-colors">Política de Protección de Datos.</a>
+            </p>
+            <button id="accept-cookies" class="bg-white text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-200 transition-colors flex-shrink-0">
+                Aceptar
+            </button>
+        </div>
+    </div>
     
     <script type="module">
         // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // --- GLOBAL VARIABLES (Provided by the environment) ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dsme-dev';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config */ };
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
+// ... existing code ... -->
         // --- FIREBASE INITIALIZATION ---
         let app, auth, db;
         try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            setLogLevel('debug');
-            
-            onAuthStateChanged(auth, async (user) => {
-                if (!user) {
-                     try {
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (error) {
-                        console.error("Authentication failed:", error);
-                    }
-                }
-            });
-        } catch(e) { console.error("Error initializing Firebase:", e); }
+// ... existing code ... -->
         
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('dsmeForm');
             const demographicsContainer = document.getElementById('demographicsContainer');
-            const questionsContainer = document.getElementById('questionsContainer');
+// ... existing code ... -->
             const continueButton = document.getElementById('continueButton');
             const questionsDisplay = document.getElementById('questions-container');
+
+            // --- Cookie Banner Logic ---
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptCookiesButton = document.getElementById('accept-cookies');
+
+            if (!localStorage.getItem('cookies_accepted')) {
+                cookieBanner.classList.remove('hidden');
+            }
+
+            acceptCookiesButton.addEventListener('click', () => {
+                localStorage.setItem('cookies_accepted', 'true');
+                cookieBanner.style.display = 'none';
+            });
+            // --- End Cookie Banner Logic ---
+
 
             const questions = [
                 // Pilar 1
                 { pilar: 1, text: "Considero que los contratiempos y \"fracasos\" son oportunidades valiosas de aprendizaje." },
-                { pilar: 1, text: "Cuando me enfrento a un problema complejo, confío en mi capacidad para encontrar una solución." },
-                { pilar: 1, text: "La incertidumbre sobre el futuro me paraliza o me genera una ansiedad abrumadora.", reverse: true },
-                { pilar: 1, text: "Me adapto con relativa facilidad a los cambios inesperados del mercado o de mi negocio." },
-                { pilar: 1, text: "Un revés importante en mi proyecto me hace dudar de todas mis capacidades.", reverse: true },
-                { pilar: 1, text: "Mantengo una visión optimista y proactiva, incluso en momentos de crisis." },
-                { pilar: 1, text: "Me cuesta mucho recuperarme emocionalmente después de una crítica dura o un rechazo.", reverse: true },
-                 // Pilar 2
-                { pilar: 2, text: "Mi sentido de valía personal es independiente del éxito o fracaso de mi empresa." },
-                { pilar: 2, text: "Si mi empresa fracasara, sentiría que he fracasado como persona.", reverse: true },
-                { pilar: 2, text: "Tengo pasiones e intereses significativos que cultivo activamente fuera de mi rol como emprendedor." },
-                { pilar: 2, text: "Puedo celebrar los logros de mi empresa sin que estos definan completamente quién soy." },
-                { pilar: 2, text: "Me siento culpable o improductivo/a cuando dedico tiempo a actividades que no están relacionadas con mi negocio.", reverse: true },
-                { pilar: 2, text: "Concibo mi empresa como un proyecto importante en mi vida, pero no como mi vida entera." },
-                { pilar: 2, text: "Las métricas de mi negocio (ingresos, crecimiento, etc.) impactan directamente en mi estado de ánimo y autoestima diarios.", reverse: true },
-                // Pilar 3
-                { pilar: 3, text: "Priorizo mis horas de sueño, entendiendo que son cruciales para mi rendimiento." },
-                { pilar: 3, text: "A menudo sacrifico mi alimentación o el ejercicio por atender urgencias del trabajo.", reverse: true },
-                { pilar: 3, text: "Establezco y respeto límites claros para desconectar mentalmente del trabajo al final del día." },
-                { pilar: 3, text: "Siento un agotamiento constante que no se alivia ni siquiera después de un fin de semana.", reverse: true },
-                { pilar: 3, text: "Dedico tiempo de forma regular a actividades que me \"recargan las baterías\" y no tienen que ver con el trabajo." },
-                { pilar: 3, text: "Soy capaz de delegar tareas eficazmente para proteger mi energía y enfocarme en lo estratégico." },
-                { pilar: 3, text: "La idea de tomar unas vacaciones reales, completamente desconectado/a, me genera más estrés que alivio.", reverse: true },
-                // Pilar 4
-                { pilar: 4, text: "Tengo un círculo de confianza (amigos, familia, pareja) con el que puedo hablar abiertamente de mis miedos." },
-                { pilar: 4, text: "Siento que la mayor parte del tiempo estoy solo/a en la toma de las decisiones más difíciles.", reverse: true },
-                { pilar: 4, text: "Busco activamente el consejo de mentores u otros emprendedores que han pasado por desafíos similares." },
-                { pilar: 4, text: "Evito compartir mis problemas para mantener una imagen de fortaleza y control frente a los demás.", reverse: true },
-                { pilar: 4, text: "Invierto tiempo de calidad en mis relaciones personales, incluso en las épocas de más trabajo." },
-                { pilar: 4, text: "Siento que mi equipo y socios me apoyan no solo como profesional, sino también como persona." },
-                { pilar: 4, text: "Me he distanciado de personas importantes en mi vida a causa de la dedicación a mi empresa.", reverse: true },
-                // Pilar 5
-                { pilar: 5, text: "Tomo decisiones financieras desde la estrategia y el análisis, no desde el pánico o la euforia." },
-                { pilar: 5, text: "La situación del flujo de caja de la empresa me quita el sueño de forma recurrente.", reverse: true },
-                { pilar: 5, text: "Confío en mi habilidad para generar recursos, incluso si enfrento una crisis económica." },
-                { pilar: 5, text: "Mi relación con el dinero es de herramienta y oportunidad, no de miedo y escasez." },
-                { pilar: 5, text: "Siento una fuerte ansiedad al revisar las finanzas de la empresa, independientemente de los resultados.", reverse: true },
-                { pilar: 5, text: "Soy capaz de asumir riesgos financieros calculados sin que esto afecte gravemente mi paz mental." },
-                { pilar: 5, text: "Comparo constantemente mi situación financiera con la de otros emprendedores, lo que me genera frustración.", reverse: true }
-            ];
-            
-            // --- Render Questions ---
-            let currentPilar = 0;
-            questions.forEach((q, index) => {
-                if (q.pilar !== currentPilar) {
-                    currentPilar = q.pilar;
-                    const pilarTitle = document.createElement('h4');
-                    pilarTitle.className = "text-xl font-semibold mt-8 mb-4 text-[#003366] border-t pt-8 first:mt-0 first:border-t-0 first:pt-0";
-                    pilarTitle.textContent = `Pilar ${currentPilar}: ${getPilarName(currentPilar)}`;
-                    questionsDisplay.appendChild(pilarTitle);
-                }
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question-block';
-                const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'flex flex-col md:flex-row justify-around text-sm';
-                ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'].forEach((label, i) => {
-                    const value = i + 1;
-                    optionsContainer.innerHTML += `<label class="radio-label"><input type="radio" name="q${index + 1}" value="${value}" required> ${label}</label>`;
-                });
-                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p>`;
-                questionDiv.appendChild(optionsContainer);
-                questionsDisplay.appendChild(questionDiv);
-            });
-
-            function getPilarName(pilarNumber) {
-                const names = ["", "Resiliencia y Gestión de la Incertidumbre", "Vínculo Identitario (Fundador ↔ Empresa)", "Sostenibilidad y Energía Personal", "Capital Social y Red de Apoyo", "Psicología Financiera"];
-                return names[pilarNumber];
-            }
-
-            // --- Step 1 to Step 2 Logic ---
-            continueButton.addEventListener('click', () => {
-                const inputs = demographicsContainer.querySelectorAll('input[required], select[required]');
-                let allValid = true;
-                inputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        allValid = false;
-                    }
-                });
-
-                if (allValid) {
-                    demographicsContainer.classList.add('hidden');
-                    questionsContainer.classList.remove('hidden');
-                    window.scrollTo({ top: questionsContainer.offsetTop - 100, behavior: 'smooth' });
-                } else {
-                    form.reportValidity(); // This will show native browser validation messages
-                }
-            });
-            
-            // --- Other Logic (Sector, Countries) ---
-            const sectorSelect = document.getElementById('sector');
-            const sectorOtroContainer = document.getElementById('sectorOtroContainer');
-            sectorSelect.addEventListener('change', () => {
-                sectorOtroContainer.classList.toggle('hidden', sectorSelect.value !== 'otro');
-                document.getElementById('sectorOtro').required = sectorSelect.value === 'otro';
-            });
-            
-            const paisSelect = document.getElementById('pais');
-            // NOTE: A more robust country list would be fetched from an API in a real application
-            const countries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Perú", "Chile", "Ecuador", "España", "Otro"];
-            countries.sort().forEach(country => paisSelect.innerHTML += `<option value="${country.toLowerCase().replace(/\s/g, '_')}">${country}</option>`);
-            paisSelect.insertAdjacentHTML('afterbegin', '<option value="" disabled selected>Selecciona un país</option>');
-
-            // --- Form Submission ---
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!auth.currentUser) {
-                    alert("Aún estamos autenticando tu sesión. Por favor, espera unos segundos e intenta de nuevo.");
-                    return;
-                }
-                
-                const submitButton = document.getElementById('submitButton');
-                submitButton.disabled = true;
-                submitButton.textContent = 'Enviando...';
-
-                const formData = new FormData(form);
-                const demographics = {};
-                const responses = {};
-
-                for(let [key, value] of formData.entries()) {
-                    if(key.startsWith('q')) responses[key] = parseInt(value);
-                    else demographics[key] = value;
-                }
-                
-                if (demographics.sector === 'otro') demographics.sector = demographics.sectorOtro;
-                delete demographics.sectorOtro;
-                delete demographics.ciudadSelect;
-
-                const fullReport = {
-                    appId,
-                    userId: auth.currentUser.uid,
-                    createdAt: serverTimestamp(),
-                    demographics,
-                    responses,
-                    questions
-                };
-                
-                try {
-                    const docRef = await addDoc(collection(db, "artifacts", appId, "public", "data", "dsme-reports"), fullReport);
-                    sessionStorage.setItem('dsmeResultId', docRef.id);
-                    sessionStorage.setItem('dsmeLastReport', JSON.stringify(fullReport));
-                    window.location.href = `rdsme.html`;
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    alert('Hubo un error al guardar tus resultados.');
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Finalizar y Enviar';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+// ... existing code ... -->
 
