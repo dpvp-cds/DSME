@@ -108,142 +108,139 @@
     <section id="instrumento" class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
-
-                <div class="card">
-                    <h2 class="text-3xl font-bold mb-4">Instrucciones</h2>
-                    <p class="mb-4">Este instrumento es una herramienta confidencial de autodescubrimiento. Consta de 35 afirmaciones que exploran cinco pilares clave de tu bienestar como emprendedor.</p>
-                    <p>No hay respuestas correctas o incorrectas. Responde con total honestidad para obtener un reflejo fiel de tu estado actual. El proceso tomará aproximadamente 10-15 minutos.</p>
-                </div>
-
                 <form id="dsmeForm">
-                    <!-- Sección A: Datos Sociodemográficos y Empresariales -->
-                    <div class="card">
-                        <h3 class="text-2xl font-bold mb-6 border-b pb-4">Sección A: Información General</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Datos Personales -->
-                            <div><label for="nombreCompleto" class="block mb-2 font-medium">Nombre Completo</label><input type="text" id="nombreCompleto" name="nombreCompleto" class="input-styled" required></div>
-                            <div><label for="email" class="block mb-2 font-medium">Correo Electrónico</label><input type="email" id="email" name="email" class="input-styled" required></div>
-                            <div><label for="edad" class="block mb-2 font-medium">Edad</label><input type="number" id="edad" name="edad" class="input-styled" required></div>
-                            <div>
-                                <label for="genero" class="block mb-2 font-medium">Género</label>
-                                <select id="genero" name="genero" class="select-styled" required>
-                                    <option value="" disabled selected>Selecciona una opción</option>
-                                    <option value="masculino">Masculino</option>
-                                    <option value="femenino">Femenino</option>
-                                    <option value="otro">Otro</option>
-                                    <option value="prefiero_no_decir">Prefiero no decirlo</option>
-                                </select>
+                    <!-- PASO 1: Demographics -->
+                    <div id="demographicsContainer">
+                        <div class="card">
+                            <h2 class="text-3xl font-bold mb-4">Paso 1: Información General</h2>
+                            <p class="mb-6">Comencemos con algunos datos básicos. Esta información es confidencial y nos ayudará a contextualizar tus resultados.</p>
+                        
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Datos Personales -->
+                                <div><label for="nombreCompleto" class="block mb-2 font-medium">Nombre Completo</label><input type="text" id="nombreCompleto" name="nombreCompleto" class="input-styled" required></div>
+                                <div><label for="email" class="block mb-2 font-medium">Correo Electrónico</label><input type="email" id="email" name="email" class="input-styled" required></div>
+                                <div><label for="edad" class="block mb-2 font-medium">Edad</label><input type="number" id="edad" name="edad" class="input-styled" required min="15"></div>
+                                <div>
+                                    <label for="genero" class="block mb-2 font-medium">Género</label>
+                                    <select id="genero" name="genero" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona una opción</option>
+                                        <option value="masculino">Masculino</option>
+                                        <option value="femenino">Femenino</option>
+                                        <option value="otro">Otro</option>
+                                        <option value="prefiero_no_decir">Prefiero no decirlo</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="pais" class="block mb-2 font-medium">País de Residencia</label>
+                                    <select id="pais" name="pais" class="select-styled" required></select>
+                                </div>
+                                <div>
+                                    <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
+                                    <input type="text" id="ciudad" name="ciudad" class="input-styled" required>
+                                    <select id="ciudadSelect" name="ciudadSelect" class="select-styled hidden"></select>
+                                </div>
+                                <div>
+                                    <label for="nivelEducativo" class="block mb-2 font-medium">Nivel Educativo</label>
+                                    <select id="nivelEducativo" name="nivelEducativo" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona una opción</option>
+                                        <option value="secundaria">Secundaria</option>
+                                        <option value="tecnico">Técnico</option>
+                                        <option value="universitario">Universitario</option>
+                                        <option value="postgrado">Postgrado</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="estadoCivil" class="block mb-2 font-medium">Estado Civil</label>
+                                    <select id="estadoCivil" name="estadoCivil" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona una opción</option>
+                                        <option value="soltero">Soltero/a</option>
+                                        <option value="relacion">En una relación</option>
+                                        <option value="casado">Casado/a</option>
+                                        <option value="divorciado">Divorciado/a</option>
+                                        <option value="viudo">Viudo/a</option>
+                                    </select>
+                                </div>
+                                <div><label for="hijos" class="block mb-2 font-medium">Número de Hijos</label><input type="number" id="hijos" name="hijos" class="input-styled" min="0" required></div>
+                                <div>
+                                    <label for="mascotas" class="block mb-2 font-medium">Mascotas</label>
+                                    <select id="mascotas" name="mascotas" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona una opción</option>
+                                        <option value="si">Sí</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <label for="pais" class="block mb-2 font-medium">País de Residencia</label>
-                                <select id="pais" name="pais" class="select-styled" required></select>
-                            </div>
-                            <div>
-                                <label for="ciudad" class="block mb-2 font-medium">Ciudad de Residencia</label>
-                                <input type="text" id="ciudad" name="ciudad" class="input-styled" required>
-                                <select id="ciudadSelect" name="ciudadSelect" class="select-styled hidden"></select>
-                            </div>
-                            <div>
-                                <label for="nivelEducativo" class="block mb-2 font-medium">Nivel Educativo</label>
-                                <select id="nivelEducativo" name="nivelEducativo" class="select-styled" required>
-                                     <option value="" disabled selected>Selecciona una opción</option>
-                                     <option value="secundaria">Secundaria</option>
-                                     <option value="tecnico">Técnico</option>
-                                     <option value="universitario">Universitario</option>
-                                     <option value="postgrado">Postgrado</option>
-                                </select>
-                            </div>
-                             <div>
-                                <label for="estadoCivil" class="block mb-2 font-medium">Estado Civil</label>
-                                <select id="estadoCivil" name="estadoCivil" class="select-styled" required>
-                                     <option value="" disabled selected>Selecciona una opción</option>
-                                     <option value="soltero">Soltero/a</option>
-                                     <option value="relacion">En una relación</option>
-                                     <option value="casado">Casado/a</option>
-                                     <option value="divorciado">Divorciado/a</option>
-                                     <option value="viudo">Viudo/a</option>
-                                </select>
-                            </div>
-                            <div><label for="hijos" class="block mb-2 font-medium">Número de Hijos</label><input type="number" id="hijos" name="hijos" class="input-styled" min="0" required></div>
-                            <div>
-                                <label for="mascotas" class="block mb-2 font-medium">Mascotas</label>
-                                <select id="mascotas" name="mascotas" class="select-styled" required>
-                                     <option value="" disabled selected>Selecciona una opción</option>
-                                     <option value="si">Sí</option>
-                                     <option value="no">No</option>
-                                </select>
+                            
+                            <h3 class="text-2xl font-bold mt-8 mb-6 border-b pb-4">Datos de la Empresa</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label for="nombreEmpresa" class="block mb-2 font-medium">Nombre de la Empresa</label><input type="text" id="nombreEmpresa" name="nombreEmpresa" class="input-styled" required></div>
+                                <div><label for="cargo" class="block mb-2 font-medium">Cargo que Ocupas</label><input type="text" id="cargo" name="cargo" class="input-styled" required></div>
+                                <div>
+                                    <label for="numEmpleados" class="block mb-2 font-medium">Número de Empleados</label>
+                                    <select id="numEmpleados" name="numEmpleados" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona un rango</option>
+                                        <option value="1">1 (Soy solo yo)</option>
+                                        <option value="2-5">2-5</option>
+                                        <option value="6-10">6-10</option>
+                                        <option value="11-50">11-50</option>
+                                        <option value="50+">Más de 50</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="tiempoConstitucion" class="block mb-2 font-medium">Tiempo de Constitución</label>
+                                    <select id="tiempoConstitucion" name="tiempoConstitucion" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona un rango</option>
+                                        <option value="<1">Menos de 1 año</option>
+                                        <option value="1-3">1-3 años</option>
+                                        <option value="4-7">4-7 años</option>
+                                        <option value="8-15">8-15 años</option>
+                                        <option value="15+">Más de 15 años</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="sector" class="block mb-2 font-medium">Sector Principal</label>
+                                    <select id="sector" name="sector" class="select-styled" required>
+                                        <option value="" disabled selected>Selecciona un sector</option>
+                                        <option value="tecnologia">Tecnología / Software / SaaS</option>
+                                        <option value="salud">Salud y Bienestar</option>
+                                        <option value="retail">Retail / E-commerce</option>
+                                        <option value="educacion">Educación / EdTech</option>
+                                        <option value="finanzas">Finanzas / Fintech</option>
+                                        <option value="consultoria">Consultoría / Servicios Profesionales</option>
+                                        <option value="manufactura">Manufactura / Industria</option>
+                                        <option value="construccion">Construcción e Inmobiliaria</option>
+                                        <option value="alimentos">Alimentos y Bebidas</option>
+                                        <option value="turismo">Turismo y Hotelería</option>
+                                        <option value="medios">Entretenimiento y Medios</option>
+                                        <option value="energia">Energía y Recursos Naturales</option>
+                                        <option value="transporte">Transporte y Logística</option>
+                                        <option value="marketing">Marketing y Publicidad</option>
+                                        <option value="agro">Agricultura / AgroTech</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div id="sectorOtroContainer" class="md:col-span-2 hidden">
+                                    <label for="sectorOtro" class="block mb-2 font-medium">Por favor, especifica tu sector</label>
+                                    <input type="text" id="sectorOtro" name="sectorOtro" class="input-styled">
+                                </div>
                             </div>
                         </div>
-                        
-                        <h3 class="text-2xl font-bold mt-8 mb-6 border-b pb-4">Datos de la Empresa</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                             <div><label for="nombreEmpresa" class="block mb-2 font-medium">Nombre de la Empresa</label><input type="text" id="nombreEmpresa" name="nombreEmpresa" class="input-styled" required></div>
-                             <div><label for="cargo" class="block mb-2 font-medium">Cargo que Ocupas</label><input type="text" id="cargo" name="cargo" class="input-styled" required></div>
-                             <div>
-                                <label for="numEmpleados" class="block mb-2 font-medium">Número de Empleados</label>
-                                <select id="numEmpleados" name="numEmpleados" class="select-styled" required>
-                                    <option value="" disabled selected>Selecciona un rango</option>
-                                    <option value="1">1 (Soy solo yo)</option>
-                                    <option value="2-5">2-5</option>
-                                    <option value="6-10">6-10</option>
-                                    <option value="11-50">11-50</option>
-                                    <option value="50+">Más de 50</option>
-                                </select>
-                             </div>
-                             <div>
-                                <label for="tiempoConstitucion" class="block mb-2 font-medium">Tiempo de Constitución</label>
-                                <select id="tiempoConstitucion" name="tiempoConstitucion" class="select-styled" required>
-                                    <option value="" disabled selected>Selecciona un rango</option>
-                                    <option value="<1">Menos de 1 año</option>
-                                    <option value="1-3">1-3 años</option>
-                                    <option value="4-7">4-7 años</option>
-                                    <option value="8-15">8-15 años</option>
-                                    <option value="15+">Más de 15 años</option>
-                                </select>
-                             </div>
-                             <div class="md:col-span-2">
-                                <label for="sector" class="block mb-2 font-medium">Sector Principal</label>
-                                <select id="sector" name="sector" class="select-styled" required>
-                                    <option value="" disabled selected>Selecciona un sector</option>
-                                    <option value="tecnologia">Tecnología / Software / SaaS</option>
-                                    <option value="salud">Salud y Bienestar</option>
-                                    <option value="retail">Retail / E-commerce</option>
-                                    <option value="educacion">Educación / EdTech</option>
-                                    <option value="finanzas">Finanzas / Fintech</option>
-                                    <option value="consultoria">Consultoría / Servicios Profesionales</option>
-                                    <option value="manufactura">Manufactura / Industria</option>
-                                    <option value="construccion">Construcción e Inmobiliaria</option>
-                                    <option value="alimentos">Alimentos y Bebidas</option>
-                                    <option value="turismo">Turismo y Hotelería</option>
-                                    <option value="medios">Entretenimiento y Medios</option>
-                                    <option value="energia">Energía y Recursos Naturales</option>
-                                    <option value="transporte">Transporte y Logística</option>
-                                    <option value="marketing">Marketing y Publicidad</option>
-                                    <option value="agro">Agricultura / AgroTech</option>
-                                    <option value="otro">Otro</option>
-                                </select>
-                             </div>
-                             <div id="sectorOtroContainer" class="md:col-span-2 hidden">
-                                <label for="sectorOtro" class="block mb-2 font-medium">Por favor, especifica tu sector</label>
-                                <input type="text" id="sectorOtro" name="sectorOtro" class="input-styled">
-                            </div>
+                        <div class="mt-8 text-center">
+                            <button type="button" id="continueButton" class="btn-brand text-lg">Continuar al Cuestionario</button>
                         </div>
                     </div>
 
-                    <!-- Sección B: Cuestionario de Pilares -->
-                    <div class="card">
-                        <h3 class="text-2xl font-bold mb-2">Sección B: Cuestionario de Pilares</h3>
-                        <p class="mb-6 text-sm text-gray-500">Indica tu grado de acuerdo con cada afirmación.</p>
-                        
-                        <!-- PILAR 1 -->
-                        <div class="question-block">
-                           <h4 class="text-xl font-semibold mb-4 text-[#003366]">Pilar 1: Resiliencia y Gestión de la Incertidumbre</h4>
-                           <!-- Preguntas 1 a 7 -->
-                           <div id="questions-container"></div>
-                        </div>
+                    <!-- PASO 2: Cuestionario -->
+                    <div id="questionsContainer" class="hidden">
+                        <div class="card">
+                            <h2 class="text-3xl font-bold mb-2">Paso 2: Cuestionario de Pilares</h2>
+                            <p class="mb-6 text-sm text-gray-500">Indica tu grado de acuerdo con cada afirmación.</p>
+                            
+                            <div id="questions-container"></div>
 
-                        <div class="mt-12 text-center">
-                            <button type="submit" id="submitButton" class="btn-brand text-lg">Finalizar y Enviar</button>
+                            <div class="mt-12 text-center">
+                                <button type="submit" id="submitButton" class="btn-brand text-lg">Finalizar y Enviar</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -259,60 +256,45 @@
     </footer>
     
     <script type="module">
-        // Import Firebase modules. NOTE: Using version 10.12.2 as an example.
+        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // --- GLOBAL VARIABLES (Provided by the environment) ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'dsme-dev';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config for local dev */
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config */ };
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // --- FIREBASE INITIALIZATION ---
-        let app, auth, db, userId;
-
+        let app, auth, db;
         try {
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
-            setLogLevel('debug'); 
-            console.log("Firebase initialized successfully.");
-
+            setLogLevel('debug');
+            
             onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    console.log("User is signed in with UID:", userId);
-                } else {
-                     console.log("No user signed in. Attempting authentication...");
+                if (!user) {
                      try {
                         if (initialAuthToken) {
                             await signInWithCustomToken(auth, initialAuthToken);
-                            console.log("Signed in with custom token.");
                         } else {
                             await signInAnonymously(auth);
-                            console.log("Signed in anonymously.");
                         }
                     } catch (error) {
                         console.error("Authentication failed:", error);
                     }
                 }
             });
-        } catch(e) {
-            console.error("Error initializing Firebase:", e);
-        }
+        } catch(e) { console.error("Error initializing Firebase:", e); }
         
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('dsmeForm');
-            const submitButton = document.getElementById('submitButton');
-            const questionsContainer = document.getElementById('questions-container');
+            const demographicsContainer = document.getElementById('demographicsContainer');
+            const questionsContainer = document.getElementById('questionsContainer');
+            const continueButton = document.getElementById('continueButton');
+            const questionsDisplay = document.getElementById('questions-container');
 
             const questions = [
                 // Pilar 1
@@ -323,7 +305,8 @@
                 { pilar: 1, text: "Un revés importante en mi proyecto me hace dudar de todas mis capacidades.", reverse: true },
                 { pilar: 1, text: "Mantengo una visión optimista y proactiva, incluso en momentos de crisis." },
                 { pilar: 1, text: "Me cuesta mucho recuperarme emocionalmente después de una crítica dura o un rechazo.", reverse: true },
-                // Pilar 2
+                // ... (Pilar 2 a 5 se acortan por brevedad en el comentario, pero el código completo los incluye)
+                 // Pilar 2
                 { pilar: 2, text: "Mi sentido de valía personal es independiente del éxito o fracaso de mi empresa." },
                 { pilar: 2, text: "Si mi empresa fracasara, sentiría que he fracasado como persona.", reverse: true },
                 { pilar: 2, text: "Tengo pasiones e intereses significativos que cultivo activamente fuera de mi rol como emprendedor." },
@@ -357,77 +340,76 @@
                 { pilar: 5, text: "Comparo constantemente mi situación financiera con la de otros emprendedores, lo que me genera frustración.", reverse: true }
             ];
             
+            // --- Render Questions ---
             let currentPilar = 0;
             questions.forEach((q, index) => {
                 if (q.pilar !== currentPilar) {
                     currentPilar = q.pilar;
                     const pilarTitle = document.createElement('h4');
-                    pilarTitle.className = "text-xl font-semibold mt-8 mb-4 text-[#003366] border-t pt-8";
+                    pilarTitle.className = "text-xl font-semibold mt-8 mb-4 text-[#003366] border-t pt-8 first:mt-0 first:border-t-0 first:pt-0";
                     pilarTitle.textContent = `Pilar ${currentPilar}: ${getPilarName(currentPilar)}`;
-                    if(currentPilar > 1) questionsContainer.appendChild(pilarTitle);
+                    questionsDisplay.appendChild(pilarTitle);
                 }
-
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'question-block';
-                questionDiv.innerHTML = `
-                    <p class="font-medium mb-3">${index + 1}. ${q.text}</p>
-                    <div class="flex flex-col md:flex-row justify-around text-sm">
-                        <label class="radio-label"><input type="radio" name="q${index + 1}" value="1" required> Totalmente en desacuerdo</label>
-                        <label class="radio-label"><input type="radio" name="q${index + 1}" value="2"> En desacuerdo</label>
-                        <label class="radio-label"><input type="radio" name="q${index + 1}" value="3"> Neutral</label>
-                        <label class="radio-label"><input type="radio" name="q${index + 1}" value="4"> De acuerdo</label>
-                        <label class="radio-label"><input type="radio" name="q${index + 1}" value="5"> Totalmente de acuerdo</label>
-                    </div>
-                `;
-                questionsContainer.appendChild(questionDiv);
+                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p><div class="flex flex-col md:flex-row justify-around text-sm">...</div>`; // Abreviado
+                
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'flex flex-col md:flex-row justify-around text-sm';
+                ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'].forEach((label, i) => {
+                    const value = i + 1;
+                    optionsContainer.innerHTML += `<label class="radio-label"><input type="radio" name="q${index + 1}" value="${value}" required> ${label}</label>`;
+                });
+                questionDiv.querySelector('p').insertAdjacentElement('afterend', optionsContainer);
+                questionsDisplay.appendChild(questionDiv);
             });
 
             function getPilarName(pilarNumber) {
-                switch(pilarNumber) {
-                    case 1: return "Resiliencia y Gestión de la Incertidumbre";
-                    case 2: return "Vínculo Identitario (Fundador ↔ Empresa)";
-                    case 3: return "Sostenibilidad y Energía Personal";
-                    case 4: return "Capital Social y Red de Apoyo";
-                    case 5: return "Psicología Financiera";
-                    default: return "";
-                }
+                const names = ["", "Resiliencia y Gestión de la Incertidumbre", "Vínculo Identitario (Fundador ↔ Empresa)", "Sostenibilidad y Energía Personal", "Capital Social y Red de Apoyo", "Psicología Financiera"];
+                return names[pilarNumber];
             }
+
+            // --- Step 1 to Step 2 Logic ---
+            continueButton.addEventListener('click', () => {
+                const inputs = demographicsContainer.querySelectorAll('input[required], select[required]');
+                let allValid = true;
+                inputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        allValid = false;
+                    }
+                });
+
+                if (allValid) {
+                    demographicsContainer.classList.add('hidden');
+                    questionsContainer.classList.remove('hidden');
+                    questionsContainer.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    form.reportValidity(); // This will show native browser validation messages
+                }
+            });
             
-            // --- Logic for 'Other' Sector ---
+            // --- Other Logic (Sector, Countries) ---
             const sectorSelect = document.getElementById('sector');
             const sectorOtroContainer = document.getElementById('sectorOtroContainer');
-            const sectorOtroInput = document.getElementById('sectorOtro');
             sectorSelect.addEventListener('change', () => {
-                if(sectorSelect.value === 'otro') {
-                    sectorOtroContainer.classList.remove('hidden');
-                    sectorOtroInput.required = true;
-                } else {
-                    sectorOtroContainer.classList.add('hidden');
-                    sectorOtroInput.required = false;
-                }
+                sectorOtroContainer.classList.toggle('hidden', sectorSelect.value !== 'otro');
+                document.getElementById('sectorOtro').required = sectorSelect.value === 'otro';
             });
-
-            // --- Country/City Logic ---
-            // NOTE: This is a simplified version. For production, use a comprehensive country list.
+            
+            // ... Full country/city logic would be implemented here ...
             const paisSelect = document.getElementById('pais');
-            // ... Full implementation to fetch and populate all countries would go here ...
             const countries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Otro"];
-            countries.forEach(country => {
-                const option = document.createElement('option');
-                option.value = country;
-                option.textContent = country;
-                paisSelect.appendChild(option);
-            });
-            // ... Logic to show city dropdown for specific countries would be added here ...
+            countries.forEach(country => paisSelect.innerHTML += `<option value="${country}">${country}</option>`);
 
-
+            // --- Form Submission ---
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 if (!auth.currentUser) {
-                    alert("Aún estamos autenticando tu sesión de forma segura. Por favor, espera unos segundos e intenta de nuevo.");
+                    alert("Aún estamos autenticando tu sesión. Por favor, espera unos segundos e intenta de nuevo.");
                     return;
                 }
                 
+                const submitButton = document.getElementById('submitButton');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Enviando...';
 
@@ -436,18 +418,12 @@
                 const responses = {};
 
                 for(let [key, value] of formData.entries()) {
-                    if(key.startsWith('q')) {
-                        responses[key] = parseInt(value);
-                    } else {
-                        demographics[key] = value;
-                    }
+                    if(key.startsWith('q')) responses[key] = parseInt(value);
+                    else demographics[key] = value;
                 }
                 
-                if (demographics.sector === 'otro') {
-                   demographics.sector = demographics.sectorOtro;
-                }
+                if (demographics.sector === 'otro') demographics.sector = demographics.sectorOtro;
                 delete demographics.sectorOtro;
-
 
                 const fullReport = {
                     appId,
@@ -455,23 +431,17 @@
                     createdAt: serverTimestamp(),
                     demographics,
                     responses,
-                    questions // Save the questions context with the report
+                    questions
                 };
                 
                 try {
-                    // Save to Firestore
                     const docRef = await addDoc(collection(db, "artifacts", appId, "public", "data", "dsme-reports"), fullReport);
-                    console.log("Document written with ID: ", docRef.id);
-                    
-                    // Save to Session Storage for results page
                     sessionStorage.setItem('dsmeResultId', docRef.id);
-                    sessionStorage.setItem('dsmeLastReport', JSON.stringify(fullReport)); // Storing the full data for immediate use
-
+                    sessionStorage.setItem('dsmeLastReport', JSON.stringify(fullReport));
                     window.location.href = `rdsme.html`;
-
                 } catch (error) {
                     console.error("Error adding document: ", error);
-                    alert('Hubo un error al guardar tus resultados. Por favor, intenta de nuevo.');
+                    alert('Hubo un error al guardar tus resultados.');
                     submitButton.disabled = false;
                     submitButton.textContent = 'Finalizar y Enviar';
                 }
