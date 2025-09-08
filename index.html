@@ -111,9 +111,12 @@
             font-weight: 700;
             letter-spacing: 0.1em;
             user-select: none;
+            display: flex; /* Added for alignment */
+            align-items: center; /* Added for alignment */
         }
         #captcha-text span {
             display: inline-block;
+            transition: transform 0.2s; /* Added for smooth refresh */
         }
         #refresh-captcha {
             background: none;
@@ -326,8 +329,8 @@
                                     <div id="captcha-text"></div>
                                     <input type="number" id="captcha-input" class="input-styled w-24 text-center text-lg" placeholder="=">
                                     <button type="button" id="refresh-captcha">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-[#003366]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M20 4h-5v5M4 20h5v-5M15 5C13.17 3.17 10.67 2 8 2 3.58 2 0 5.58 0 10s3.58 8 8 8c4.08 0 7.44-3.05 7.93-7" transform="rotate(315 12 12)"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-[#003366] transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                                         </svg>
                                     </button>
                                 </div>
@@ -647,10 +650,17 @@
                 const num2 = Math.floor(Math.random() * 10);
                 captchaAnswer = num1 + num2;
                 
-                const distortedNum1 = String(num1).split('').map(char => `<span style="transform: rotate(${Math.random()*20-10}deg);">${char}</span>`).join('');
-                const distortedNum2 = String(num2).split('').map(char => `<span style="transform: rotate(${Math.random()*20-10}deg);">${char}</span>`).join('');
+                const distortChar = (char) => {
+                    const rotation = Math.random() * 30 - 15; // -15 to +15 deg
+                    const skewY = Math.random() * 20 - 10;    // -10 to +10 deg skew
+                    const translateY = Math.random() * 8 - 4; // -4px to +4px vertical shift
+                    return `<span style="transform: rotate(${rotation}deg) skewY(${skewY}deg) translateY(${translateY}px);">${char}</span>`;
+                };
+
+                const distortedNum1 = String(num1).split('').map(distortChar).join('');
+                const distortedNum2 = String(num2).split('').map(distortChar).join('');
                 
-                captchaText.innerHTML = `${distortedNum1} + ${distortedNum2}`;
+                captchaText.innerHTML = `${distortedNum1} <span class="mx-2">+</span> ${distortedNum2}`;
                 captchaInput.value = '';
                 captchaError.classList.add('hidden');
             }
