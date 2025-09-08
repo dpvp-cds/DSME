@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Resultados - Escala DSME</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8F7F2;
+            color: #4A4A4A;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+        .card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-brand {
+            background-color: #003366;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-brand:hover {
+            background-color: #002244;
+            transform: translateY(-2px);
+        }
+        .score-badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .badge-green { background-color: #dcfce7; color: #166534; }
+        .badge-yellow { background-color: #fef9c3; color: #854d0e; }
+        .badge-red { background-color: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+     <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="https://www.caminosdelser.co" target="_blank">
+                <img src="logoprincipal.png" alt="Caminos del Ser Logo" class="h-11 w-auto">
+            </a>
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center space-x-6">
+                <a href="https://www.caminosdelser.co" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Inicio</a>
+                <a href="BaseTeorica_PI.pdf" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Base Teórica</a>
+                <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Contacto</a>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="hamburger-button" class="text-gray-600 hover:text-[#003366] focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <a href="https://www.caminosdelser.co" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Inicio</a>
+            <a href="BaseTeorica_PI.pdf" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Base Teórica</a>
+            <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Contacto</a>
+        </div>
+    </header>
+
+    <main class="py-16">
+        <div id="loading" class="text-center py-20">
+            <h2 class="text-2xl font-semibold">Procesando tus resultados...</h2>
+            <div class="mt-4 animate-spin rounded-full h-12 w-12 border-b-2 border-[#003366] mx-auto"></div>
+        </div>
+        
+        <div id="report-container" class="hidden container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-2">Tus Resultados del Diagnóstico</h1>
+                    <p id="userName" class="text-lg text-gray-600"></p>
+                </div>
+
+                <!-- Global Score -->
+                <div class="card mb-12 text-center">
+                    <h2 class="text-2xl mb-4">Índice de Salud Mental del Emprendedor (ISME)</h2>
+                    <div id="ismeScoreDisplay" class="text-7xl font-bold text-[#003366]"></div>
+                    <div id="ismeInterpretation" class="mt-4 text-lg"></div>
+                </div>
+
+                <!-- Radar Chart and Pillars -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="card">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    <div id="pillarsSummary" class="space-y-4">
+                        <!-- Pillar summaries will be injected here -->
+                    </div>
+                </div>
+
+                 <!-- Call to Action -->
+                <div class="card mt-12 text-center">
+                    <h2 class="text-3xl mb-4">¿Quieres profundizar en tus resultados?</h2>
+                    <p class="max-w-2xl mx-auto mb-6">Estos resultados son el primer paso. Una conversación profesional puede ayudarte a trazar un plan de acción para fortalecer tus pilares y asegurar tu bienestar a largo plazo.</p>
+                    <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20acabo%20de%20completar%20la%20Escala%20DSME%20y%20me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n." target="_blank" class="btn-brand">
+                        Contactar para una sesión
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingDiv = document.getElementById('loading');
+            const reportContainer = document.getElementById('report-container');
+            const hamburgerButton = document.getElementById('hamburger-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            hamburgerButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const reportDataString = sessionStorage.getItem('dsmeLastReport');
+            if (!reportDataString) {
+                loadingDiv.innerHTML = '<h2 class="text-2xl font-semibold text-red-600">No se encontraron resultados. Por favor, completa el diagnóstico primero.</h2>';
+                return;
+            }
+
+            try {
+                const reportData = JSON.parse(reportDataString);
+                const processedReport = calculateAndDisplayResults(reportData);
+                sendEmailNotification(processedReport); // Send email in the background
+                loadingDiv.classList.add('hidden');
+                reportContainer.classList.remove('hidden');
+            } catch (e) {
+                console.error("Error processing report data:", e);
+                loadingDiv.innerHTML = '<h2 class="text-2xl font-semibold text-red-600">Hubo un error al procesar tus resultados.</h2>';
+            }
+        });
+
+        function calculateAndDisplayResults(reportData) {
+            const { demographics, responses, questions } = reportData;
+
+            document.getElementById('userName').textContent = `Hola, ${demographics.nombreCompleto.split(' ')[0]}. Este es tu panorama actual:`;
+
+            // --- Calculations ---
+            const pilarScores = { pilar1: 0, pilar2: 0, pilar3: 0, pilar4: 0, pilar5: 0 };
+            
+            questions.forEach((q, index) => {
+                const responseValue = responses[`q${index + 1}`];
+                let score = responseValue;
+                if (q.reverse) {
+                    score = 6 - responseValue;
+                }
+                pilarScores[`pilar${q.pilar}`] += score;
+            });
+
+            const totalScore = Object.values(pilarScores).reduce((sum, score) => sum + score, 0);
+            const ismeScore = ((totalScore - 35) / 140) * 100;
+
+            // --- Display Global Score ---
+            document.getElementById('ismeScoreDisplay').textContent = `${ismeScore.toFixed(0)}`;
+            const ismeInterpretationDiv = document.getElementById('ismeInterpretation');
+            if (ismeScore >= 91) {
+                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-green">Nivel Óptimo / Antifrágil</span><p class="mt-2">Tu salud mental es excepcionalmente robusta. Conviertes el estrés en crecimiento.</p>`;
+            } else if (ismeScore >= 71) {
+                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-green">Nivel Sostenible / Próspero</span><p class="mt-2">Tienes un muy buen equilibrio. Estás prosperando, no solo sobreviviendo.</p>`;
+            } else if (ismeScore >= 41) {
+                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-yellow">Nivel Vulnerable / Supervivencia</span><p class="mt-2">Te mantienes a flote, pero con un costo energético notable. Hay áreas que requieren tu atención.</p>`;
+            } else {
+                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-red">Nivel Crítico / En Riesgo</span><p class="mt-2">Tu situación actual es insostenible. Es prioritario buscar apoyo para evitar el burnout.</p>`;
+            }
+
+            // --- Display Pillars ---
+            const pillarsSummaryDiv = document.getElementById('pillarsSummary');
+            const pillarNames = ["Resiliencia", "Vínculo Identitario", "Sostenibilidad", "Capital Social", "Psicología Financiera"];
+            
+            Object.values(pilarScores).forEach((score, index) => {
+                const pilarDiv = document.createElement('div');
+                let badgeClass, interpretationText;
+
+                if (score >= 26) {
+                    badgeClass = 'badge-green';
+                    interpretationText = 'Zona de Fortaleza';
+                } else if (score >= 16) {
+                    badgeClass = 'badge-yellow';
+                    interpretationText = 'Zona de Atención';
+                } else {
+                    badgeClass = 'badge-red';
+                    interpretationText = 'Zona de Alerta';
+                }
+                
+                pilarDiv.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-lg font-semibold">${index + 1}. ${pillarNames[index]}</h4>
+                        <span class="score-badge ${badgeClass}">${interpretationText}</span>
+                    </div>
+                `;
+                pillarsSummaryDiv.appendChild(pilarDiv);
+            });
+
+            // --- Radar Chart ---
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: pillarNames,
+                    datasets: [{
+                        label: 'Puntuación por Pilar',
+                        data: Object.values(pilarScores),
+                        backgroundColor: 'rgba(0, 51, 102, 0.2)',
+                        borderColor: 'rgba(0, 51, 102, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(0, 51, 102, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 51, 102, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0,0,0,0.1)' },
+                            grid: { color: 'rgba(0,0,0,0.1)' },
+                            pointLabels: { 
+                                font: { size: 12, weight: '600', family: 'Poppins' },
+                                color: '#4A4A4A'
+                            },
+                            ticks: {
+                                backdropColor: '#F8F7F2',
+                                color: '#6B6661'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 35
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Return the processed data for email sending
+            return {
+                demographics,
+                pilarScores,
+                ismeScore
+            };
+        }
+        
+        // --- Send Email Notification ---
+        async function sendEmailNotification(processedReportData) {
+             try {
+                await fetch('/api/enviar-reporte-personal', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(processedReportData)
+                });
+             } catch (error) {
+                console.error("Error sending email notification:", error);
+                // This is a background task, so we don't alert the user
+             }
+        }
+    </script>
+</body>
+</html>
+
