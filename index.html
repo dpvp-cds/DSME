@@ -362,8 +362,12 @@
                                 </div>
                                 <div id="captcha-error" class="text-red-600 text-center text-sm hidden">Respuesta incorrecta. Por favor, intenta de nuevo.</div>
                             </div>
+                            
+                            <!-- DIV para mostrar errores de guardado -->
+                            <div id="firestore-error-message" class="hidden mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-center">
+                            </div>
 
-                            <div class="mt-12 text-center">
+                            <div class="mt-8 text-center">
                                 <button type="submit" id="submitButton" class="btn-brand text-lg" disabled>Finalizar y Enviar</button>
                             </div>
                         </div>
@@ -399,9 +403,8 @@
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // --- GLOBAL VARIABLES (Provided by the environment) ---
-        // MODIFICACIÓN: Usamos 'dsm' como el identificador fijo para evitar inconsistencias.
         const appId = 'dsm'; 
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {}; // Use environment config
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // --- FIREBASE INITIALIZATION ---
@@ -437,6 +440,7 @@
             const mobileMenu = document.getElementById('mobile-menu');
             const finalValidationError = document.getElementById('final-validation-error');
             const privacyPolicyCheckbox = document.getElementById('privacy-policy');
+            const firestoreErrorDiv = document.getElementById('firestore-error-message');
             
             // --- Mobile Menu Logic ---
             hamburgerButton.addEventListener('click', () => {
@@ -715,6 +719,7 @@
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                firestoreErrorDiv.classList.add('hidden'); // Hide previous errors
                 submitButton.disabled = true;
                 submitButton.textContent = 'Enviando...';
 
@@ -792,7 +797,6 @@
                 
                 // 4. Save to Firestore
                 try {
-                    // Se asegura de que la ruta de guardado siempre use el appId 'dsm'
                     const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'dsme-reports');
                     await addDoc(collectionRef, finalData);
                     
@@ -802,8 +806,8 @@
 
                 } catch (error) {
                     console.error("Error adding document: ", error);
-                    // MODIFICACIÓN: La alerta ahora muestra el mensaje de error específico.
-                    alert(`Hubo un error al guardar tus respuestas. Por favor, intenta de nuevo.\n\nDetalle del error: ${error.message}`);
+                    firestoreErrorDiv.textContent = `Hubo un error al guardar tus respuestas. Por favor, intenta de nuevo. Detalle: ${error.message}`;
+                    firestoreErrorDiv.classList.remove('hidden');
                     submitButton.disabled = false;
                     submitButton.textContent = 'Finalizar y Enviar';
                 }
