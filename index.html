@@ -97,15 +97,14 @@
     </header>
 
     <!-- Hero Section -->
-    <main class="container mx-auto px-6 py-16 text-center">
+    <main id="instrumento" class="container mx-auto px-6 py-16 text-center">
         <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Diagnóstico de Salud Mental para el Emprendedor</h1>
         <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">Una herramienta diseñada para iluminar tu bienestar, fortalecer tu resiliencia y asegurar tu sostenibilidad en el desafiante camino de emprender.</p>
         <p class="text-2xl italic text-gray-800 mb-10">"Que el cielo sea el límite, no tu mente"</p>
-        <a href="#instrumento" class="btn-brand">Comenzar el Diagnóstico</a>
     </main>
 
     <!-- Instrumento Section -->
-    <section id="instrumento" class="py-16 bg-gray-50">
+    <section class="py-16 bg-gray-50 -mt-16 pt-0">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
                 <form id="dsmeForm">
@@ -305,7 +304,6 @@
                 { pilar: 1, text: "Un revés importante en mi proyecto me hace dudar de todas mis capacidades.", reverse: true },
                 { pilar: 1, text: "Mantengo una visión optimista y proactiva, incluso en momentos de crisis." },
                 { pilar: 1, text: "Me cuesta mucho recuperarme emocionalmente después de una crítica dura o un rechazo.", reverse: true },
-                // ... (Pilar 2 a 5 se acortan por brevedad en el comentario, pero el código completo los incluye)
                  // Pilar 2
                 { pilar: 2, text: "Mi sentido de valía personal es independiente del éxito o fracaso de mi empresa." },
                 { pilar: 2, text: "Si mi empresa fracasara, sentiría que he fracasado como persona.", reverse: true },
@@ -352,15 +350,14 @@
                 }
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'question-block';
-                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p><div class="flex flex-col md:flex-row justify-around text-sm">...</div>`; // Abreviado
-                
                 const optionsContainer = document.createElement('div');
                 optionsContainer.className = 'flex flex-col md:flex-row justify-around text-sm';
                 ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'].forEach((label, i) => {
                     const value = i + 1;
                     optionsContainer.innerHTML += `<label class="radio-label"><input type="radio" name="q${index + 1}" value="${value}" required> ${label}</label>`;
                 });
-                questionDiv.querySelector('p').insertAdjacentElement('afterend', optionsContainer);
+                questionDiv.innerHTML = `<p class="font-medium mb-3">${index + 1}. ${q.text}</p>`;
+                questionDiv.appendChild(optionsContainer);
                 questionsDisplay.appendChild(questionDiv);
             });
 
@@ -382,7 +379,7 @@
                 if (allValid) {
                     demographicsContainer.classList.add('hidden');
                     questionsContainer.classList.remove('hidden');
-                    questionsContainer.scrollIntoView({ behavior: 'smooth' });
+                    window.scrollTo({ top: questionsContainer.offsetTop - 100, behavior: 'smooth' });
                 } else {
                     form.reportValidity(); // This will show native browser validation messages
                 }
@@ -396,10 +393,11 @@
                 document.getElementById('sectorOtro').required = sectorSelect.value === 'otro';
             });
             
-            // ... Full country/city logic would be implemented here ...
             const paisSelect = document.getElementById('pais');
-            const countries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Otro"];
-            countries.forEach(country => paisSelect.innerHTML += `<option value="${country}">${country}</option>`);
+            // NOTE: A more robust country list would be fetched from an API in a real application
+            const countries = ["Colombia", "Estados Unidos", "Argentina", "Brasil", "México", "Perú", "Chile", "Ecuador", "España", "Otro"];
+            countries.sort().forEach(country => paisSelect.innerHTML += `<option value="${country.toLowerCase().replace(/\s/g, '_')}">${country}</option>`);
+            paisSelect.insertAdjacentHTML('afterbegin', '<option value="" disabled selected>Selecciona un país</option>');
 
             // --- Form Submission ---
             form.addEventListener('submit', async (e) => {
@@ -424,6 +422,7 @@
                 
                 if (demographics.sector === 'otro') demographics.sector = demographics.sectorOtro;
                 delete demographics.sectorOtro;
+                delete demographics.ciudadSelect;
 
                 const fullReport = {
                     appId,
