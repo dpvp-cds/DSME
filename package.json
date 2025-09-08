@@ -1,0 +1,14 @@
+{
+  "name": "dsme-app",
+  "version": "1.0.0",
+  "description": "Funciones Serverless para la Escala DSME",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jorge Arango Castaño",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^12.1.1"
+  }
+}
