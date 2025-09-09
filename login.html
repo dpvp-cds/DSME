@@ -109,8 +109,8 @@
                 errorMessage.classList.add('hidden');
                 // Guardamos un token de sesión para indicar que el consultor está autenticado.
                 sessionStorage.setItem('consultorAuth', 'true');
-                // Redirigimos al portal de reportes.
-                window.location.href = 'portal.html';
+                // Redirigimos al portal de reportes de empresa.
+                window.location.href = 'portal-empresa.html';
             } else {
                 errorMessage.classList.remove('hidden');
                 passwordInput.value = '';
