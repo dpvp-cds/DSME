@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Resultados - Escala DSME</title>
+    <title>Resultados DSME - Diagnóstico de Salud Mental del Emprendedor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,16 +15,10 @@
             background-color: #F8F7F2;
             color: #4A4A4A;
         }
-        h1, h2, h3, h4 {
+        h1, h2, h3 {
             font-family: 'Poppins', sans-serif;
             color: #1a1a1a;
             font-weight: 700;
-        }
-        .card {
-            background-color: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         .btn-brand {
             background-color: #003366;
@@ -33,255 +27,205 @@
             border-radius: 9999px;
             font-weight: 600;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .btn-brand:hover {
             background-color: #002244;
             transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
         }
-        .score-badge {
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 0.9rem;
-            font-weight: 600;
+        .card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
         }
-        .badge-green { background-color: #dcfce7; color: #166534; }
-        .badge-yellow { background-color: #fef9c3; color: #854d0e; }
-        .badge-red { background-color: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Header -->
-     <header class="bg-white shadow-sm sticky top-0 z-40">
+    <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="https://www.caminosdelser.co" target="_blank">
                 <img src="logoprincipal.png" alt="Caminos del Ser Logo" class="h-11 w-auto">
             </a>
-            <!-- Desktop Menu -->
             <nav class="hidden md:flex items-center space-x-6">
                 <a href="https://www.caminosdelser.co" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Inicio</a>
                 <a href="BaseTeorica_PI.pdf" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Base Teórica</a>
                 <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="text-gray-600 hover:text-[#003366] font-medium transition-colors">Contacto</a>
             </nav>
-            <!-- Mobile Menu Button -->
-            <div class="md:hidden">
-                <button id="hamburger-button" class="text-gray-600 hover:text-[#003366] focus:outline-none">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <a href="https://www.caminosdelser.co" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Inicio</a>
-            <a href="BaseTeorica_PI.pdf" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Base Teórica</a>
-            <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20quiero%20saber%20m%C3%A1s%20sobre%20mi%20Salud%20Mental%20y%20en%20torno%20a%20mi%20empresa" target="_blank" class="block py-3 px-6 text-gray-600 hover:bg-gray-50 transition-colors">Contacto</a>
         </div>
     </header>
 
-    <main class="py-16">
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
         <div id="loading" class="text-center py-20">
-            <h2 class="text-2xl font-semibold">Procesando tus resultados...</h2>
-            <div class="mt-4 animate-spin rounded-full h-12 w-12 border-b-2 border-[#003366] mx-auto"></div>
+            <h1 class="text-3xl">Cargando tus resultados...</h1>
         </div>
-        
-        <div id="report-container" class="hidden container mx-auto px-6">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-2">Tus Resultados del Diagnóstico</h1>
-                    <p id="userName" class="text-lg text-gray-600"></p>
-                </div>
 
-                <!-- Global Score -->
-                <div class="card mb-12 text-center">
+        <div id="resultsContent" class="hidden">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold mb-2">Tus Resultados Preliminares</h1>
+                <p class="text-lg text-gray-600">Hola <span id="userName" class="font-semibold text-[#003366]"></span>, este es un primer vistazo a tu bienestar como emprendedor.</p>
+            </div>
+
+            <!-- Global Score and Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
+                <div class="card text-center">
                     <h2 class="text-2xl mb-4">Índice de Salud Mental del Emprendedor (ISME)</h2>
-                    <div id="ismeScoreDisplay" class="text-7xl font-bold text-[#003366]"></div>
-                    <div id="ismeInterpretation" class="mt-4 text-lg"></div>
+                    <div id="ismeScore" class="text-7xl font-bold text-[#003366]"></div>
+                    <p class="text-xl text-gray-500 mb-4">/ 100</p>
+                    <p id="ismeInterpretation" class="text-lg"></p>
                 </div>
-
-                <!-- Radar Chart and Pillars -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div class="card">
+                <div class="card h-full flex items-center justify-center">
+                    <div class="w-full h-80 md:h-96">
                         <canvas id="radarChart"></canvas>
                     </div>
-                    <div id="pillarsSummary" class="space-y-4">
-                        <!-- Pillar summaries will be injected here -->
-                    </div>
                 </div>
+            </div>
 
-                 <!-- Call to Action -->
-                <div class="card mt-12 text-center">
-                    <h2 class="text-3xl mb-4">¿Quieres profundizar en tus resultados?</h2>
-                    <p class="max-w-2xl mx-auto mb-6">Estos resultados son el primer paso. Una conversación profesional puede ayudarte a trazar un plan de acción para fortalecer tus pilares y asegurar tu bienestar a largo plazo.</p>
-                    <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20acabo%20de%20completar%20la%20Escala%20DSME%20y%20me%20gustar%C3%ADa%20agendar%20una%20sesi%C3%B3n." target="_blank" class="btn-brand">
-                        Contactar para una sesión
-                    </a>
+            <!-- Pillar Details -->
+            <div>
+                <h2 class="text-3xl font-bold text-center mb-8">Análisis por Pilar</h2>
+                <div id="pilarDetails" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Pillar cards will be inserted here by JavaScript -->
                 </div>
+            </div>
 
+             <!-- Disclaimer and Next Steps -->
+             <div class="card mt-12 text-center bg-[#003366] text-white">
+                <h2 class="text-3xl mb-4">¿Cuáles son los siguientes pasos?</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-200">
+                    Recuerda, este es un diagnóstico preliminar diseñado para abrir una conversación, no para emitir un juicio. El verdadero valor reside en explorar estos resultados con un profesional. Si deseas una interpretación más profunda y crear un plan de acción, no dudes en contactarme.
+                </p>
+                <div class="mt-8">
+                    <a href="https://wa.me/573233796547?text=Hola%20Jorge,%20acabo%20de%20completar%20la%20Escala%20DSME%20y%20me%20gustar%C3%ADa%20profundizar%20en%20mis%20resultados." target="_blank" class="btn-brand bg-white text-[#003366] hover:bg-gray-200">Agendar una Cita</a>
+                </div>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-[#1a1a1a] text-white py-8 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-400">&copy; 2025 Jorge Arango Castaño - Caminos del Ser. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const loadingDiv = document.getElementById('loading');
-            const reportContainer = document.getElementById('report-container');
-            const hamburgerButton = document.getElementById('hamburger-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+            const resultsContent = document.getElementById('resultsContent');
+            const sessionData = sessionStorage.getItem('dsmeResults');
 
-            hamburgerButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            const reportDataString = sessionStorage.getItem('dsmeLastReport');
-            if (!reportDataString) {
-                loadingDiv.innerHTML = '<h2 class="text-2xl font-semibold text-red-600">No se encontraron resultados. Por favor, completa el diagnóstico primero.</h2>';
+            if (!sessionData) {
+                loadingDiv.innerHTML = '<h1 class="text-3xl text-center text-red-600">No se encontraron resultados. Por favor, completa primero el cuestionario.</h1>';
                 return;
             }
 
             try {
-                const reportData = JSON.parse(reportDataString);
-                const processedReport = calculateAndDisplayResults(reportData);
-                sendEmailNotification(processedReport); // Send email in the background
+                const data = JSON.parse(sessionData);
+                displayResults(data);
                 loadingDiv.classList.add('hidden');
-                reportContainer.classList.remove('hidden');
+                resultsContent.classList.remove('hidden');
             } catch (e) {
-                console.error("Error processing report data:", e);
-                loadingDiv.innerHTML = '<h2 class="text-2xl font-semibold text-red-600">Hubo un error al procesar tus resultados.</h2>';
+                console.error("Error al procesar los datos de la sesión:", e);
+                loadingDiv.innerHTML = '<h1 class="text-3xl text-center text-red-600">Hubo un error al cargar tus resultados.</h1>';
             }
         });
 
-        function calculateAndDisplayResults(reportData) {
-            const { demographics, responses, questions } = reportData;
+        function getIsmeInterpretation(score) {
+            if (score >= 91) return { text: 'Óptimo / Antifrágil', color: 'text-green-600', description: 'Tu salud mental es excepcionalmente robusta. No solo resistes el estrés, sino que lo utilizas para crecer.' };
+            if (score >= 71) return { text: 'Sostenible / Próspero', color: 'text-blue-600', description: 'Tienes un muy buen equilibrio entre los desafíos del emprendimiento y tu bienestar. Estás prosperando.' };
+            if (score >= 41) return { text: 'Vulnerable / Supervivencia', color: 'text-yellow-600', description: 'Te mantienes a flote, pero probablemente con un alto costo personal. Existe riesgo de pasar a un estado crítico si la presión aumenta.' };
+            return { text: 'Crítico / En Riesgo', color: 'text-red-600', description: 'Tu situación actual es insostenible y afecta tu calidad de vida. Se recomienda buscar apoyo profesional de forma prioritaria.' };
+        }
 
-            document.getElementById('userName').textContent = `Hola, ${demographics.nombreCompleto.split(' ')[0]}. Este es tu panorama actual:`;
+        function getPilarInterpretation(score) {
+            if (score >= 26) return { text: '✅ Zona de Fortaleza', color: 'bg-green-100 text-green-800', description: 'Este pilar es un recurso clave que te sirve de apoyo para afrontar otros desafíos.' };
+            if (score >= 16) return { text: '⚠️ Zona de Atención', color: 'bg-yellow-100 text-yellow-800', description: 'Este pilar presenta vulnerabilidades que, si no se atienden, pueden drenar tu energía.' };
+            return { text: '🆘 Zona de Alerta', color: 'bg-red-100 text-red-800', description: 'Este pilar es un área de vulnerabilidad crítica que requiere atención prioritaria.' };
+        }
 
-            // --- Calculations ---
-            const pilarScores = { pilar1: 0, pilar2: 0, pilar3: 0, pilar4: 0, pilar5: 0 };
+        function displayResults(data) {
+            const { demograficos, pilarScores, ismeScore } = data;
+
+            // Display global score
+            document.getElementById('userName').textContent = demograficos.nombre.split(' ')[0];
+            const ismeInterpretationData = getIsmeInterpretation(ismeScore);
+            document.getElementById('ismeScore').textContent = ismeScore.toFixed(1);
+            document.getElementById('ismeScore').classList.add(ismeInterpretationData.color);
+            document.getElementById('ismeInterpretation').innerHTML = `<span class="font-bold ${ismeInterpretationData.color}">${ismeInterpretationData.text}:</span> ${ismeInterpretationData.description}`;
+
+            // Display pillar details
+            const pilarDetailsContainer = document.getElementById('pilarDetails');
+            const pilarNames = ["", "Resiliencia y Gestión de la Incertidumbre", "Vínculo Identitario", "Sostenibilidad y Energía Personal", "Capital Social y Red de Apoyo", "Psicología Financiera"];
             
-            questions.forEach((q, index) => {
-                const responseValue = responses[`q${index + 1}`];
-                let score = responseValue;
-                if (q.reverse) {
-                    score = 6 - responseValue;
-                }
-                pilarScores[`pilar${q.pilar}`] += score;
-            });
-
-            const totalScore = Object.values(pilarScores).reduce((sum, score) => sum + score, 0);
-            const ismeScore = ((totalScore - 35) / 140) * 100;
-
-            // --- Display Global Score ---
-            document.getElementById('ismeScoreDisplay').textContent = `${ismeScore.toFixed(0)}`;
-            const ismeInterpretationDiv = document.getElementById('ismeInterpretation');
-            if (ismeScore >= 91) {
-                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-green">Nivel Óptimo / Antifrágil</span><p class="mt-2">Tu salud mental es excepcionalmente robusta. Conviertes el estrés en crecimiento.</p>`;
-            } else if (ismeScore >= 71) {
-                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-green">Nivel Sostenible / Próspero</span><p class="mt-2">Tienes un muy buen equilibrio. Estás prosperando, no solo sobreviviendo.</p>`;
-            } else if (ismeScore >= 41) {
-                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-yellow">Nivel Vulnerable / Supervivencia</span><p class="mt-2">Te mantienes a flote, pero con un costo energético notable. Hay áreas que requieren tu atención.</p>`;
-            } else {
-                ismeInterpretationDiv.innerHTML = `<span class="score-badge badge-red">Nivel Crítico / En Riesgo</span><p class="mt-2">Tu situación actual es insostenible. Es prioritario buscar apoyo para evitar el burnout.</p>`;
-            }
-
-            // --- Display Pillars ---
-            const pillarsSummaryDiv = document.getElementById('pillarsSummary');
-            const pillarNames = ["Resiliencia", "Vínculo Identitario", "Sostenibilidad", "Capital Social", "Psicología Financiera"];
-            
-            Object.values(pilarScores).forEach((score, index) => {
-                const pilarDiv = document.createElement('div');
-                let badgeClass, interpretationText;
-
-                if (score >= 26) {
-                    badgeClass = 'badge-green';
-                    interpretationText = 'Zona de Fortaleza';
-                } else if (score >= 16) {
-                    badgeClass = 'badge-yellow';
-                    interpretationText = 'Zona de Atención';
-                } else {
-                    badgeClass = 'badge-red';
-                    interpretationText = 'Zona de Alerta';
-                }
-                
-                pilarDiv.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <h4 class="text-lg font-semibold">${index + 1}. ${pillarNames[index]}</h4>
-                        <span class="score-badge ${badgeClass}">${interpretationText}</span>
+            for (let i = 1; i <= 5; i++) {
+                const score = pilarScores[i];
+                const interpretation = getPilarInterpretation(score);
+                const cardHtml = `
+                    <div class="card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold">${pilarNames[i]}</h3>
+                            <span class="text-2xl font-bold text-[#003366]">${score}<span class="text-lg text-gray-400">/35</span></span>
+                        </div>
+                        <div class="text-sm font-semibold px-2 py-1 rounded-full inline-block ${interpretation.color}">${interpretation.text}</div>
+                        <p class="mt-4 text-gray-600">${interpretation.description}</p>
                     </div>
                 `;
-                pillarsSummaryDiv.appendChild(pilarDiv);
-            });
+                pilarDetailsContainer.innerHTML += cardHtml;
+            }
 
-            // --- Radar Chart ---
+            // Create Radar Chart
             const ctx = document.getElementById('radarChart').getContext('2d');
             new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: pillarNames,
+                    labels: pilarNames.slice(1),
                     datasets: [{
-                        label: 'Puntuación por Pilar',
+                        label: 'Tu Puntuación',
                         data: Object.values(pilarScores),
                         backgroundColor: 'rgba(0, 51, 102, 0.2)',
                         borderColor: 'rgba(0, 51, 102, 1)',
-                        borderWidth: 2,
                         pointBackgroundColor: 'rgba(0, 51, 102, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(0, 51, 102, 1)'
+                        pointHoverBorderColor: 'rgba(0, 51, 102, 1)',
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     scales: {
                         r: {
-                            angleLines: { color: 'rgba(0,0,0,0.1)' },
-                            grid: { color: 'rgba(0,0,0,0.1)' },
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
                             pointLabels: { 
-                                font: { size: 12, weight: '600', family: 'Poppins' },
+                                font: { size: 12, weight: 'bold' }, 
                                 color: '#4A4A4A'
                             },
-                            ticks: {
-                                backdropColor: '#F8F7F2',
-                                color: '#6B6661'
-                            },
+                            ticks: { display: false, stepSize: 7 },
                             suggestedMin: 0,
                             suggestedMax: 35
                         }
                     },
                     plugins: {
-                        legend: {
-                            display: false
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Puntuación: ${context.raw}`;
+                                }
+                            }
                         }
                     }
                 }
             });
-
-            // Return the processed data for email sending
-            return {
-                demographics,
-                pilarScores,
-                ismeScore
-            };
-        }
-        
-        // --- Send Email Notification ---
-        async function sendEmailNotification(processedReportData) {
-             try {
-                await fetch('/api/enviar-reporte-personal', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(processedReportData)
-                });
-             } catch (error) {
-                console.error("Error sending email notification:", error);
-                // This is a background task, so we don't alert the user
-             }
         }
     </script>
 </body>
 </html>
-
