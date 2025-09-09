@@ -1,30 +1,31 @@
-import { db } from './lib/firebaseAdmin.js';
+import { db } from '../lib/firebaseAdmin.js';
 
-export default async function handler(req, res) {
-    // 1. Verificamos que la solicitud sea para BORRAR datos (DELETE).
-    if (req.method !== 'DELETE') {
-        return res.status(405).json({ message: 'Método no permitido' });
+export default async function handler(request, response) {
+    // 1. Verificamos que el método de la solicitud sea DELETE.
+    if (request.method !== 'DELETE') {
+        return response.status(405).json({ message: 'Método no permitido' });
     }
-    
-    // NOTA DE SEGURIDAD: En un futuro, aquí se debería verificar que solo un terapeuta autenticado pueda hacer esta petición.
 
-    // 2. Extraemos el ID del reporte que el portal.html nos dice que borremos.
-    const { id } = req.query;
-    if (!id) {
-        return res.status(400).json({ message: 'El ID del reporte es requerido.' });
-    }
+    // NOTA DE SEGURIDAD: En un futuro, aquí se debería verificar
+    // que solo un consultor autenticado pueda hacer esta petición.
 
     try {
-        // 3. Usamos nuestra conexión 'db' y le damos la orden de borrar el documento con ese ID.
-        const docRef = db.collection('reportes_dpvper').doc(id);
-        await docRef.delete();
+        // 2. Extraemos el ID del reporte de la URL.
+        const { id } = request.query;
+        if (!id) {
+            return response.status(400).json({ message: 'El ID del reporte es requerido.' });
+        }
+
+        // 3. Damos la orden a Firestore de borrar el documento con ese ID de la colección 'reports'.
+        await db.collection('reports').doc(id).delete();
         
-        // 4. Enviamos una respuesta de éxito de vuelta al portal.html para que sepa que la operación funcionó.
-        res.status(200).json({ message: 'Reporte eliminado con éxito.' });
+        console.log(`Reporte con ID: ${id} eliminado exitosamente de la base de datos.`);
+        
+        // 4. Enviamos una respuesta de éxito de vuelta al portal para confirmar el borrado.
+        response.status(200).json({ message: 'Reporte eliminado con éxito.' });
 
     } catch (error) {
-        console.error(`Error al eliminar reporte ${id}:`, error);
-        res.status(500).json({ message: 'Error interno del servidor.' });
+        console.error(`Error al eliminar el reporte ${id}:`, error);
+        response.status(500).json({ message: 'Error interno del servidor al eliminar el reporte.' });
     }
 }
-
