@@ -80,8 +80,8 @@ export default async function handler(request, response) {
         const resend = new Resend(resendApiKey);
         
         const { data, error } = await resend.emails.send({
-          from: 'Reporte DSME <noreply@caminosdelser.co>',
-          to: 'dpvp.cds@emotic.com',
+          from: 'Reporte DSME <noreply@emcotic.com>',
+          to: 'dpvp.cds@emcotic.com',
           subject: `Nuevo Reporte DSME - ${datosCompletos.demograficos.nombre}`,
           html: `<h1>Nuevo Reporte de la Escala DSME</h1><p>Se ha completado un nuevo diagnóstico.</p><p><strong>Nombre:</strong> ${datosCompletos.demograficos.nombre}</p><p><strong>Email:</strong> ${datosCompletos.demograficos.email}</p><p>El reporte completo se encuentra adjunto en formato PDF.</p>`,
           attachments: [
@@ -105,4 +105,5 @@ export default async function handler(request, response) {
         response.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }
 }
+
 
