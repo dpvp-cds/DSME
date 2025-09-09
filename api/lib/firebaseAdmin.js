@@ -37,6 +37,9 @@ function initializeFirebaseAdmin() {
     try {
         // Decodificamos la clave desde Base64 para que Firebase pueda leerla.
         const serviceAccountJson = Buffer.from(serviceAccountBase64, 'base64').toString('utf-8');
+        // Log para ver el contenido decodificado antes de parsear
+        console.log("Contenido decodificado (primeros 400 caracteres):", serviceAccountJson.substring(0, 400));
+        // Intentamos parsear el JSON
         const serviceAccount = JSON.parse(serviceAccountJson);
 
         // Inicializamos la app con las credenciales.
