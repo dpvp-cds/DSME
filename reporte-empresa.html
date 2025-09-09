@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Reporte - Escala DSME</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F7F2; color: #4A4A4A; }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; color: #1a1a1a; font-weight: 700; }
+        .card { background-color: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .detail-item { border-bottom: 1px solid #e5e7eb; padding-bottom: 0.75rem; margin-bottom: 0.75rem; }
+        .detail-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="portal-empresa.html" class="text-sm font-medium text-gray-600 hover:text-[#003366] flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                Volver al Portal
+            </a>
+            <button id="logoutButton" class="text-sm font-medium text-gray-600 hover:text-[#003366]">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <div id="loading" class="text-center py-20">
+            <h1 class="text-3xl">Cargando reporte detallado...</h1>
+        </div>
+
+        <div id="reportContent" class="hidden space-y-8">
+            <!-- Título y Fecha -->
+            <div>
+                <h1 id="reportTitle" class="text-4xl font-bold text-center">Reporte de</h1>
+                <p id="reportDate" class="text-center text-gray-500 mt-2">Completado el</p>
+            </div>
+
+            <!-- Datos y Gráfico -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 card">
+                    <h2 class="text-2xl font-bold mb-4">Información</h2>
+                    <div id="demographicsContent"></div>
+                </div>
+                <div class="lg:col-span-2 card">
+                    <h2 class="text-2xl font-bold mb-4">Resumen Visual</h2>
+                    <div class="w-full h-96 mx-auto">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análisis de Pilares -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">Análisis Detallado por Pilar</h2>
+                <div id="pilarDetails" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- Respuestas Individuales -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-4">Respuestas del Cuestionario</h2>
+                <div id="answersContent" class="space-y-3 text-sm"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- VERIFICACIÓN DE SEGURIDAD ---
+            if (sessionStorage.getItem('consultorAuth') !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('logoutButton').addEventListener('click', () => {
+                sessionStorage.removeItem('consultorAuth');
+                window.location.href = 'login.html';
+            });
+            
+            fetchReport();
+        });
+
+        async function fetchReport() {
+            const loadingDiv = document.getElementById('loading');
+            const reportContentDiv = document.getElementById('reportContent');
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (!id) {
+                loadingDiv.innerHTML = '<h1 class="text-3xl text-red-600">ID de reporte no proporcionado.</h1>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/get-reporte-individual?id=${id}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'No se pudo cargar el reporte.');
+                }
+                const reporte = await response.json();
+                
+                displayReport(reporte);
+
+                loadingDiv.classList.add('hidden');
+                reportContentDiv.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error al cargar el reporte individual:", error);
+                loadingDiv.innerHTML = `<h1 class="text-3xl text-red-600">Error: ${error.message}</h1>`;
+            }
+        }
+
+        function displayReport(reporte) {
+            const { demograficos, empresa, pilarScores, ismeScore, respuestas, fecha } = reporte;
+
+            // Títulos
+            document.getElementById('reportTitle').textContent += ` ${demograficos.nombre}`;
+            const fechaFormateada = new Date(fecha).toLocaleString('es-CO', { dateStyle: 'full', timeStyle: 'short' });
+            document.getElementById('reportDate').textContent += ` ${fechaFormateada}`;
+
+            // Demographics
+            const demoDiv = document.getElementById('demographicsContent');
+            demoDiv.innerHTML = `
+                <div class="detail-item"><strong>Email:</strong> ${demograficos.email}</div>
+                <div class="detail-item"><strong>Edad:</strong> ${demograficos.edad}</div>
+                <div class="detail-item"><strong>País:</strong> ${demograficos.pais}</div>
+                <div class="detail-item"><strong>Ciudad:</strong> ${demograficos.ciudad}</div>
+                <h3 class="font-bold mt-6 mb-2">Empresa</h3>
+                <div class="detail-item"><strong>Nombre:</strong> ${empresa.nombre}</div>
+                <div class="detail-item"><strong>Cargo:</strong> ${empresa.cargo}</div>
+                <div class="detail-item"><strong>Sector:</strong> ${empresa.sector}</div>
+            `;
+
+            // Análisis de Pilares
+            const pilarDetailsContainer = document.getElementById('pilarDetails');
+            const pilarNames = ["", "Resiliencia", "Vínculo Identitario", "Sostenibilidad", "Capital Social", "Psicología Financiera"];
+            for (let i = 1; i <= 5; i++) {
+                const score = pilarScores[i];
+                const interpretation = getPilarInterpretation(score);
+                pilarDetailsContainer.innerHTML += `
+                    <div class="p-4 rounded-lg ${interpretation.color.replace('bg-', 'bg-opacity-20 border border-').replace('-100', '-200')}">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold">${pilarNames[i]}</h4>
+                            <span class="font-bold text-xl">${score}/35</span>
+                        </div>
+                        <div class="text-xs font-semibold px-2 py-0.5 rounded-full inline-block ${interpretation.color}">${interpretation.text}</div>
+                    </div>
+                `;
+            }
+
+            // Respuestas
+            const answersDiv = document.getElementById('answersContent');
+            const questions = [
+                "1. Considero que los contratiempos y \"fracasos\" son oportunidades valiosas de aprendizaje.", "2. Cuando me enfrento a un problema complejo, confío en mi capacidad para encontrar una solución.",
+                "3. La incertidumbre sobre el futuro me paraliza o me genera una ansiedad abrumadora.", "4. Me adapto con relativa facilidad a los cambios inesperados del mercado o de mi negocio.",
+                "5. Un revés importante en mi proyecto me hace dudar de todas mis capacidades.", "6. Mantengo una visión optimista y proactiva, incluso en momentos de crisis.",
+                "7. Me cuesta mucho recuperarme emocionalmente después de una crítica dura o un rechazo.", "8. Mi sentido de valía personal es independiente del éxito o fracaso de mi empresa.",
+                "9. Si mi empresa fracasara, sentiría que he fracasado como persona.", "10. Tengo pasiones e intereses significativos que cultivo activamente fuera de mi rol como emprendedor.",
+                "11. Puedo celebrar los logros de mi empresa sin que estos definan completamente quién soy.", "12. Me siento culpable o improductivo/a cuando dedico tiempo a actividades que no están relacionadas con mi negocio.",
+                "13. Concibo mi empresa como un proyecto importante en mi vida, pero no como mi vida entera.", "14. Las métricas de mi negocio (ingresos, crecimiento, etc.) impactan directamente en mi estado de ánimo y autoestima diarios.",
+                "15. Priorizo mis horas de sueño, entendiendo que son cruciales para mi rendimiento.", "16. A menudo sacrifico mi alimentación o el ejercicio por atender urgencias del trabajo.",
+                "17. Establezco y respeto límites claros para desconectar mentalmente del trabajo al final del día.", "18. Siento un agotamiento constante que no se alivia ni siquiera después de un fin de semana.",
+                "19. Dedico tiempo de forma regular a actividades que me \"recargan las baterías\" y no tienen que ver con el trabajo.", "20. Soy capaz de delegar tareas eficazmente para proteger mi energía y enfocarme en lo estratégico.",
+                "21. La idea de tomar unas vacaciones reales, completamente desconectado/a, me genera más estrés que alivio.", "22. Tengo un círculo de confianza (amigos, familia, pareja) con el que puedo hablar abiertamente de mis miedos.",
+                "23. Siento que la mayor parte del tiempo estoy solo/a en la toma de las decisiones más difíciles.", "24. Busco activamente el consejo de mentores u otros emprendedores que han pasado por desafíos similares.",
+                "25. Evito compartir mis problemas para mantener una imagen de fortaleza y control frente a los demás.", "26. Invierto tiempo de calidad en mis relaciones personales, incluso en las épocas de más trabajo.",
+                "27. Siento que mi equipo y socios me apoyan no solo como profesional, sino también como persona.", "28. Me he distanciado de personas importantes en mi vida a causa de la dedicación a mi empresa.",
+                "29. Tomo decisiones financieras desde la estrategia y el análisis, no desde el pánico o la euforia.", "30. La situación del flujo de caja de la empresa me quita el sueño de forma recurrente.",
+                "31. Confío en mi habilidad para generar recursos, incluso si enfrento una crisis económica.", "32. Mi relación con el dinero es de herramienta y oportunidad, no de miedo y escasez.",
+                "33. Siento una fuerte ansiedad al revisar las finanzas de la empresa, independientemente de los resultados.", "34. Soy capaz de asumir riesgos financieros calculados sin que esto afecte gravemente mi paz mental.",
+                "35. Comparo constantemente mi situación financiera con la de otros emprendedores, lo que me genera frustración."
+            ];
+            let answersHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">';
+            questions.forEach((q, i) => {
+                answersHtml += `<div><strong>${q}</strong>: <span class="font-semibold text-[#003366]">${respuestas['q'+i]}</span></div>`;
+            });
+            answersHtml += '</div>';
+            answersDiv.innerHTML = answersHtml;
+
+            // Gráfico
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: pilarNames.slice(1),
+                    datasets: [{
+                        label: 'Puntuación', data: Object.values(pilarScores),
+                        backgroundColor: 'rgba(0, 51, 102, 0.2)', borderColor: 'rgba(0, 51, 102, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { r: { suggestedMin: 0, suggestedMax: 35, ticks: { stepSize: 7 } } }
+                }
+            });
+        }
+        
+        function getPilarInterpretation(score) {
+            if (score >= 26) return { text: '✅ Zona de Fortaleza', color: 'bg-green-100 text-green-800' };
+            if (score >= 16) return { text: '⚠️ Zona de Atención', color: 'bg-yellow-100 text-yellow-800' };
+            return { text: '🆘 Zona de Alerta', color: 'bg-red-100 text-red-800' };
+        }
+    </script>
+</body>
+</html>
