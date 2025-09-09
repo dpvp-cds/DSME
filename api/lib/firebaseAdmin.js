@@ -8,16 +8,30 @@ function initializeFirebaseAdmin() {
         return admin.app();
     }
 
+    // Log para diagnosticar la variable de entorno.
+    console.log(
+        "FIREBASE_SERVICE_ACCOUNT_BASE64 length:",
+        process.env.FIREBASE_SERVICE_ACCOUNT_BASE64
+            ? process.env.FIREBASE_SERVICE_ACCOUNT_BASE64.length
+            : 'undefined'
+    );
+    console.log(
+        "Primeros 100 caracteres:",
+        process.env.FIREBASE_SERVICE_ACCOUNT_BASE64
+            ? process.env.FIREBASE_SERVICE_ACCOUNT_BASE64.substring(0, 100)
+            : "No variable definida"
+    );
+
     // Leemos la variable de entorno que contiene la llave en Base64.
-    // **Asegúrate de que esta variable exista en Vercel**
     const serviceAccountBase64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
 
-    // Log para verificar el contenido Base64 recibido (descomenta para diagnóstico)
-    console.log("Contenido base64 recibido (primeros 100 caracteres):", serviceAccountBase64 ? serviceAccountBase64.substring(0, 100) : 'Variable no definida');
-
     if (!serviceAccountBase64) {
-        console.error("CRITICAL: La variable de entorno FIREBASE_SERVICE_ACCOUNT_BASE64 no está definida en Vercel.");
-        throw new Error('La configuración del servidor de Firebase (admin) no está completa.');
+        console.error(
+            "CRITICAL: La variable de entorno FIREBASE_SERVICE_ACCOUNT_BASE64 no está definida en Vercel."
+        );
+        throw new Error(
+            'La configuración del servidor de Firebase (admin) no está completa.'
+        );
     }
 
     try {
@@ -30,7 +44,10 @@ function initializeFirebaseAdmin() {
             credential: admin.credential.cert(serviceAccount)
         });
     } catch (error) {
-        console.error("Error al decodificar o parsear la FIREBASE_SERVICE_ACCOUNT_BASE64:", error);
+        console.error(
+            "Error al decodificar o parsear la FIREBASE_SERVICE_ACCOUNT_BASE64:",
+            error
+        );
         throw new Error('La llave de la cuenta de servicio de Firebase está malformada.');
     }
 }
